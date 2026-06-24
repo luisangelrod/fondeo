@@ -1,0 +1,195 @@
+{
+  "nav": {
+    "home": "Home",
+    "apply": "Apply Now",
+    "dashboard": "My Dashboard",
+    "signIn": "Sign In",
+    "signOut": "Sign Out"
+  },
+  "hero": {
+    "badge": "Specialists in Puerto Rico & US Hispanic businesses",
+    "headline": "Find the funding your business deserves",
+    "subheadline": "No spam. No surprises. We analyze your cash flow, not just your credit score, to find lenders who will actually approve you.",
+    "cta": "Get Started Free",
+    "ctaSubtext": "Won't affect your credit score",
+    "ctaBottom": "Ready to find your funding?",
+    "ctaBottomSub": "Takes 2 minutes. Won't affect your credit.",
+    "ctaBottomBtn": "Get started now",
+    "languageToggle": "Español"
+  },
+  "stats": {
+    "businesses": "businesses funded",
+    "funded": "in capital issued",
+    "speed": "avg. funding time",
+    "spam": "unsolicited lender calls"
+  },
+  "pain": {
+    "title": "Why small businesses in Puerto Rico struggle to get funded",
+    "p1Title": "Traditional banks say no",
+    "p1Desc": "PR commercial banks are historically conservative. 73% of small business loan applications are rejected.",
+    "p2Title": "Loan portals bombard you with calls",
+    "p2Desc": "Other sites send your information to dozens of lenders without your permission. You get 20 calls in one day.",
+    "p3Title": "Your credit score doesn't tell the whole story",
+    "p3Desc": "A low credit score doesn't mean your business isn't profitable. Modern lenders look at your actual cash flow."
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "step1Title": "Tell us about your business",
+    "step1Desc": "2 minutes. No signup required.",
+    "step2Title": "Connect your bank account",
+    "step2Desc": "We analyze your real cash flow, not just your credit.",
+    "step3Title": "See your real options",
+    "step3Desc": "Only you decide which lender gets your information."
+  },
+  "antiSpam": {
+    "title": "Your information, your control",
+    "desc": "Unlike other portals, we don't send your profile to any lender without your explicit permission. Only when you click 'Apply with this lender' do we share your information."
+  },
+  "footer": {
+    "copy": "© 2026 Fondeo. All rights reserved."
+  },
+  "apply": {
+    "title": "Apply for funding",
+    "step": "Step",
+    "of": "of",
+    "next": "Next",
+    "back": "Back",
+    "submit": "See my options",
+    "step1": {
+      "title": "Your Business",
+      "businessName": "Business name",
+      "businessNamePlaceholder": "E.g. El Bohío Restaurant",
+      "businessType": "Business type",
+      "businessTypePlaceholder": "Select...",
+      "timeInBusiness": "Time in operation",
+      "timeInBusinessPlaceholder": "Select...",
+      "state": "State / Territory",
+      "statePlaceholder": "Select...",
+      "businessTypes": {
+        "Retail": "Retail / Store",
+        "Restaurant": "Restaurant / Food",
+        "Service": "Services",
+        "Construction": "Construction / Contractor",
+        "Transportation": "Transportation / Logistics",
+        "Professional": "Professional Services",
+        "Other": "Other"
+      },
+      "timePeriods": {
+        "Under 6 months": "Less than 6 months",
+        "6-12 months": "6 to 12 months",
+        "1-2 years": "1 to 2 years",
+        "2-5 years": "2 to 5 years",
+        "5+ years": "More than 5 years"
+      }
+    },
+    "step2": {
+      "title": "Business Revenue",
+      "monthlyRevenue": "Average monthly revenue",
+      "monthlyRevenuePlaceholder": "Select...",
+      "revenueConsistency": "Revenue consistency",
+      "revenueConsistencyPlaceholder": "Select...",
+      "revenues": {
+        "Under $5K": "Under $5,000",
+        "$5K-$15K": "$5,000 to $15,000",
+        "$15K-$30K": "$15,000 to $30,000",
+        "$30K-$75K": "$30,000 to $75,000",
+        "$75K+": "Over $75,000"
+      },
+      "consistencies": {
+        "Stable": "Stable (varies less than 20%)",
+        "Seasonal": "Seasonal (high/low seasons)",
+        "Growing": "Growing month over month",
+        "Inconsistent": "Inconsistent"
+      }
+    },
+    "step3": {
+      "title": "Loan Details",
+      "loanPurpose": "Loan purpose",
+      "loanPurposePlaceholder": "Select...",
+      "loanAmount": "Amount needed",
+      "loanAmountPlaceholder": "Select...",
+      "urgency": "Urgency",
+      "urgencyPlaceholder": "Select...",
+      "purposes": {
+        "Working capital": "Working capital",
+        "Equipment": "Equipment or machinery",
+        "Expansion": "Business expansion",
+        "Inventory": "Inventory",
+        "Debt refinancing": "Refinance existing debt",
+        "Emergency": "Emergency / Unexpected expense"
+      },
+      "amounts": {
+        "$5K-$25K": "$5,000 to $25,000",
+        "$25K-$75K": "$25,000 to $75,000",
+        "$75K-$150K": "$75,000 to $150,000",
+        "$150K-$500K": "$150,000 to $500,000",
+        "$500K+": "Over $500,000"
+      },
+      "urgencies": {
+        "ASAP (days)": "As soon as possible (days)",
+        "Within 2 weeks": "Within 2 weeks",
+        "Within a month": "Within a month",
+        "No rush": "No rush"
+      }
+    },
+    "step4": {
+      "title": "Contact Information",
+      "ownerName": "Full name",
+      "ownerNamePlaceholder": "John Smith",
+      "email": "Email address",
+      "emailPlaceholder": "you@yourbusiness.com",
+      "phone": "Phone number",
+      "phonePlaceholder": "(787) 555-0123",
+      "creditScore": "Approximate credit score",
+      "creditScorePlaceholder": "Select...",
+      "creditScores": {
+        "Below 500": "Below 500",
+        "500-580": "500 to 580",
+        "580-650": "580 to 650",
+        "650-700": "650 to 700",
+        "700+": "700 or higher",
+        "I don't know": "I don't know / Prefer not to say"
+      }
+    },
+    "step5": {
+      "title": "Connect Your Bank",
+      "whyTitle": "Why connect your account?",
+      "whyBody": "Connecting your bank account lets us analyze your real cash flow — not just your credit score — to find the best options for your business. This does NOT affect your credit score.",
+      "connect": "Connect bank account",
+      "connected": "Account connected!",
+      "connectedBody": "Your bank information has been securely analyzed.",
+      "secure": "Secure connection powered by Plaid. Your credentials are never stored by us.",
+      "skip": "Skip for now (fewer options)"
+    }
+  },
+  "results": {
+    "title": "Your funding options",
+    "scoreLabel": "LendScore",
+    "scoreGreat": "Excellent — Multiple options available",
+    "scoreGood": "Good — Qualifies for several products",
+    "scoreFair": "Fair — Options are available",
+    "scoreLow": "Limited — Fewer options but they exist",
+    "applyWith": "Apply with",
+    "approvalOdds": "Approval odds",
+    "estimatedAmount": "Estimated amount",
+    "estimatedRate": "Estimated rate",
+    "fundingSpeed": "Funding speed",
+    "products": "Available products",
+    "strengths": "What works in your favor",
+    "redFlags": "What to prepare",
+    "privacyNote": "By clicking 'Apply', only that lender will receive your information.",
+    "applyNote": "Only this lender will receive your information.",
+    "applied": "Application sent!"
+  },
+  "dashboard": {
+    "title": "My Dashboard",
+    "applications": "My applications",
+    "noApplications": "No applications yet. Get started now!",
+    "status": {
+      "submitted": "Submitted",
+      "pending": "Under review",
+      "funded": "Approved",
+      "declined": "Declined"
+    }
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "apply": "Aplica Ahora",
+    "dashboard": "Mi Panel",
+    "signIn": "Iniciar Sesión",
+    "signOut": "Cerrar Sesión"
+  },
+  "hero": {
+    "badge": "Especialistas en negocios de Puerto Rico",
+    "headline": "Encuentra el financiamiento que tu negocio merece",
+    "subheadline": "Sin spam. Sin sorpresas. Analizamos tu flujo de caja, no solo tu crédito, para encontrar los prestamistas que realmente te aprobarán.",
+    "cta": "Empieza Gratis",
+    "ctaSubtext": "No afecta tu crédito",
+    "ctaBottom": "¿Listo para encontrar tu financiamiento?",
+    "ctaBottomSub": "Toma 2 minutos. No afecta tu crédito.",
+    "ctaBottomBtn": "Empieza ahora",
+    "languageToggle": "English"
+  },
+  "stats": {
+    "businesses": "negocios financiados",
+    "funded": "en capital otorgado",
+    "speed": "tiempo promedio de fondeo",
+    "spam": "llamadas no solicitadas"
+  },
+  "pain": {
+    "title": "Por qué los negocios en Puerto Rico luchan para conseguir fondos",
+    "p1Title": "Los bancos tradicionales dicen no",
+    "p1Desc": "Los bancos comerciales de PR son históricamente conservadores. 73% de las solicitudes de pequeños negocios son rechazadas.",
+    "p2Title": "Los portales te bombardean con llamadas",
+    "p2Desc": "Otros sitios envían tu información a docenas de prestamistas sin tu permiso. Recibes 20 llamadas en un día.",
+    "p3Title": "Tu puntuación de crédito no cuenta toda la historia",
+    "p3Desc": "Un crédito bajo no significa que tu negocio no es rentable. Los prestamistas modernos miran tu flujo de caja real."
+  },
+  "howItWorks": {
+    "title": "Así funciona",
+    "step1Title": "Cuéntanos sobre tu negocio",
+    "step1Desc": "2 minutos. Sin registro previo.",
+    "step2Title": "Conecta tu cuenta bancaria",
+    "step2Desc": "Analizamos tu flujo de caja real, no solo tu crédito.",
+    "step3Title": "Ve tus opciones reales",
+    "step3Desc": "Solo tú decides qué prestamista recibe tu información."
+  },
+  "antiSpam": {
+    "title": "Tu información, tu control",
+    "desc": "A diferencia de otros portales, no enviamos tu perfil a ningún prestamista sin tu permiso explícito. Solo cuando tú hagas clic en 'Aplicar con este prestamista' compartimos tu información."
+  },
+  "footer": {
+    "copy": "© 2026 Fondeo. Todos los derechos reservados."
+  },
+  "apply": {
+    "title": "Solicita financiamiento",
+    "step": "Paso",
+    "of": "de",
+    "next": "Siguiente",
+    "back": "Atrás",
+    "submit": "Ver mis opciones",
+    "step1": {
+      "title": "Tu negocio",
+      "businessName": "Nombre del negocio",
+      "businessNamePlaceholder": "Ej: Restaurante El Bohío",
+      "businessType": "Tipo de negocio",
+      "businessTypePlaceholder": "Selecciona...",
+      "timeInBusiness": "Tiempo en operación",
+      "timeInBusinessPlaceholder": "Selecciona...",
+      "state": "Estado / Territorio",
+      "statePlaceholder": "Selecciona...",
+      "businessTypes": {
+        "Retail": "Retail / Tienda",
+        "Restaurant": "Restaurante / Comida",
+        "Service": "Servicios",
+        "Construction": "Construcción / Contratista",
+        "Transportation": "Transporte / Logística",
+        "Professional": "Servicios Profesionales",
+        "Other": "Otro"
+      },
+      "timePeriods": {
+        "Under 6 months": "Menos de 6 meses",
+        "6-12 months": "6 a 12 meses",
+        "1-2 years": "1 a 2 años",
+        "2-5 years": "2 a 5 años",
+        "5+ years": "Más de 5 años"
+      }
+    },
+    "step2": {
+      "title": "Ingresos del negocio",
+      "monthlyRevenue": "Ingresos mensuales promedio",
+      "monthlyRevenuePlaceholder": "Selecciona...",
+      "revenueConsistency": "Consistencia de ingresos",
+      "revenueConsistencyPlaceholder": "Selecciona...",
+      "revenues": {
+        "Under $5K": "Menos de $5,000",
+        "$5K-$15K": "$5,000 a $15,000",
+        "$15K-$30K": "$15,000 a $30,000",
+        "$30K-$75K": "$30,000 a $75,000",
+        "$75K+": "Más de $75,000"
+      },
+      "consistencies": {
+        "Stable": "Estable (varía menos de 20%)",
+        "Seasonal": "Estacional (temporadas altas/bajas)",
+        "Growing": "Creciendo mes a mes",
+        "Inconsistent": "Inconsistente"
+      }
+    },
+    "step3": {
+      "title": "Detalles del préstamo",
+      "loanPurpose": "Propósito del préstamo",
+      "loanPurposePlaceholder": "Selecciona...",
+      "loanAmount": "Monto que necesitas",
+      "loanAmountPlaceholder": "Selecciona...",
+      "urgency": "Urgencia",
+      "urgencyPlaceholder": "Selecciona...",
+      "purposes": {
+        "Working capital": "Capital de trabajo",
+        "Equipment": "Equipo o maquinaria",
+        "Expansion": "Expansión del negocio",
+        "Inventory": "Inventario",
+        "Debt refinancing": "Refinanciar deuda existente",
+        "Emergency": "Emergencia / Imprevisto"
+      },
+      "amounts": {
+        "$5K-$25K": "$5,000 a $25,000",
+        "$25K-$75K": "$25,000 a $75,000",
+        "$75K-$150K": "$75,000 a $150,000",
+        "$150K-$500K": "$150,000 a $500,000",
+        "$500K+": "Más de $500,000"
+      },
+      "urgencies": {
+        "ASAP (days)": "Lo antes posible (días)",
+        "Within 2 weeks": "Dentro de 2 semanas",
+        "Within a month": "Dentro de 1 mes",
+        "No rush": "Sin prisa"
+      }
+    },
+    "step4": {
+      "title": "Información de contacto",
+      "ownerName": "Nombre completo",
+      "ownerNamePlaceholder": "Luis Rodríguez",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "tu@negocio.com",
+      "phone": "Teléfono",
+      "phonePlaceholder": "(787) 555-0123",
+      "creditScore": "Puntuación de crédito aproximada",
+      "creditScorePlaceholder": "Selecciona...",
+      "creditScores": {
+        "Below 500": "Menos de 500",
+        "500-580": "500 a 580",
+        "580-650": "580 a 650",
+        "650-700": "650 a 700",
+        "700+": "700 o más",
+        "I don't know": "No sé / Prefiero no decir"
+      }
+    },
+    "step5": {
+      "title": "Conecta tu banco",
+      "whyTitle": "¿Por qué conectar tu cuenta?",
+      "whyBody": "Conectar tu cuenta bancaria nos permite analizar tu flujo de caja real — no solo tu puntuación de crédito — para encontrar las mejores opciones para tu negocio. Esto NO afecta tu puntuación de crédito.",
+      "connect": "Conectar cuenta bancaria",
+      "connected": "¡Cuenta conectada!",
+      "connectedBody": "Tu información bancaria ha sido analizada de forma segura.",
+      "secure": "Conexión segura con tecnología Plaid. Tus credenciales nunca son almacenadas por nosotros.",
+      "skip": "Omitir por ahora (menos opciones)"
+    }
+  },
+  "results": {
+    "title": "Tus opciones de financiamiento",
+    "scoreLabel": "LendScore",
+    "scoreGreat": "Excelente — Múltiples opciones disponibles",
+    "scoreGood": "Bueno — Califica para varios productos",
+    "scoreFair": "Regular — Hay opciones disponibles",
+    "scoreLow": "Limitado — Opciones reducidas pero existen",
+    "applyWith": "Aplicar con",
+    "approvalOdds": "Probabilidad de aprobación",
+    "estimatedAmount": "Monto estimado",
+    "estimatedRate": "Tasa estimada",
+    "fundingSpeed": "Velocidad de fondos",
+    "products": "Productos disponibles",
+    "strengths": "Lo que juega a tu favor",
+    "redFlags": "Lo que debes preparar",
+    "privacyNote": "Al hacer clic en 'Aplicar', solo ese prestamista recibirá tu información.",
+    "applyNote": "Solo este prestamista recibirá tu información.",
+    "applied": "¡Solicitud enviada!"
+  },
+  "dashboard": {
+    "title": "Mi Panel",
+    "applications": "Mis solicitudes",
+    "noApplications": "Aún no tienes solicitudes. ¡Empieza ahora!",
+    "status": {
+      "submitted": "Enviada",
+      "pending": "En revisión",
+      "funded": "Aprobada",
+      "declined": "Rechazada"
+    }
+  }
+}
