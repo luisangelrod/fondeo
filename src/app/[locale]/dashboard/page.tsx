@@ -99,12 +99,12 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <NavBar locale={locale} />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-20 pb-16">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('title')}</h1>
           {business && (
             <p className="text-gray-500 mt-1 flex items-center gap-2">
               <Building2 className="h-4 w-4" />
@@ -131,9 +131,9 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
         {business && (
           <div className="space-y-6">
             {/* Top stats row */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {/* LendScore card */}
-              <Card>
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardContent className="pt-5 pb-5">
                   <div className="flex items-center justify-between mb-3">
                     <p className="text-sm text-gray-500 font-medium">{t('lendScore')}</p>
@@ -151,7 +151,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                     </div>
                   ) : (
                     <span className="text-gray-400 text-sm">
-                      {locale === 'es' ? 'Pendiente' : 'Pending'}
+                      {t('status.pending')}
                     </span>
                   )}
                   {scoreLabel && (
@@ -163,7 +163,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
               </Card>
 
               {/* Application status */}
-              <Card>
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardContent className="pt-5 pb-5">
                   <div className="flex items-center justify-between mb-3">
                     <p className="text-sm text-gray-500 font-medium">
@@ -171,8 +171,8 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                     </p>
                     <CheckCircle className="h-4 w-4 text-gray-400" />
                   </div>
-                  <p className="text-lg font-bold text-gray-900">
-                    {locale === 'es' ? 'Completada' : 'Completed'}
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">
+                    {t('completed')}
                   </p>
                   <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
                     <Clock className="h-3 w-3" />
@@ -185,7 +185,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
               </Card>
 
               {/* Leads submitted */}
-              <Card>
+              <Card className="dark:bg-gray-900 dark:border-gray-800">
                 <CardContent className="pt-5 pb-5">
                   <div className="flex items-center justify-between mb-3">
                     <p className="text-sm text-gray-500 font-medium">
@@ -193,10 +193,10 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                     </p>
                     <AlertCircle className="h-4 w-4 text-gray-400" />
                   </div>
-                  <p className="text-4xl font-black text-gray-900">{leads.length}</p>
+                  <p className="text-4xl font-black text-gray-900 dark:text-white">{leads.length}</p>
                   {leads.some((l) => l.submission.status === 'funded') && (
                     <p className="text-sm text-green-600 font-medium mt-1">
-                      {locale === 'es' ? '¡Uno financiado!' : 'One funded!'}
+                      {t('oneFunded')}
                     </p>
                   )}
                 </CardContent>
@@ -220,24 +220,24 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
             {/* Submitted leads table */}
             {leads.length > 0 && (
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   {t('submittedLeads')}
                 </h2>
                 <Card>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="border-b border-gray-100 bg-gray-50">
-                          <th className="text-left py-3 px-4 text-gray-500 font-medium">
+                        <tr className="border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                          <th className="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">
                             {t('table.lender')}
                           </th>
-                          <th className="text-left py-3 px-4 text-gray-500 font-medium">
+                          <th className="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">
                             {t('table.submittedDate')}
                           </th>
-                          <th className="text-left py-3 px-4 text-gray-500 font-medium">
+                          <th className="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">
                             {t('table.status')}
                           </th>
-                          <th className="text-left py-3 px-4 text-gray-500 font-medium">
+                          <th className="text-left py-3 px-4 text-gray-500 dark:text-gray-400 font-medium">
                             {t('table.amount')}
                           </th>
                         </tr>
@@ -250,10 +250,10 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                               key={submission.id}
                               className="border-b border-gray-50 last:border-0"
                             >
-                              <td className="py-3 px-4 font-medium text-gray-900">
+                              <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">
                                 {match.lenderName}
                               </td>
-                              <td className="py-3 px-4 text-gray-500">
+                              <td className="py-3 px-4 text-gray-500 dark:text-gray-400">
                                 {new Date(submission.submittedAt).toLocaleDateString(
                                   locale === 'es' ? 'es-PR' : 'en-US',
                                   { month: 'short', day: 'numeric', year: 'numeric' }
@@ -262,7 +262,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                               <td className="py-3 px-4">
                                 <Badge variant={variant}>{label}</Badge>
                               </td>
-                              <td className="py-3 px-4 text-gray-600">
+                              <td className="py-3 px-4 text-gray-600 dark:text-gray-400">
                                 {match.estimatedAmount ?? '—'}
                               </td>
                             </tr>

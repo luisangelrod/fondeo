@@ -55,6 +55,8 @@
     "next": "Siguiente",
     "back": "Atrás",
     "submit": "Ver mis opciones",
+    "submitError": "Error al procesar tu solicitud",
+    "unknownError": "Error desconocido. Intenta de nuevo.",
     "step1": {
       "title": "Tu negocio",
       "businessName": "Nombre del negocio",
@@ -191,7 +193,9 @@
     "reqTime": "3+ meses en operación",
     "reqCredit": "Puntaje de crédito 500+",
     "reapplyLink": "Actualizar mi solicitud cuando esté listo",
-    "lenderDisclosure": "Fondeo es un servicio de referido de préstamos, no un prestamista. Podemos recibir honorarios de referido cuando se otorga un préstamo."
+    "lenderDisclosure": "Fondeo es un servicio de referido de préstamos, no un prestamista. Podemos recibir honorarios de referido cuando se otorga un préstamo.",
+    "submitError": "Error al enviar la solicitud",
+    "unknownError": "Error desconocido"
   },
   "dashboard": {
     "title": "Mi Panel",
@@ -204,6 +208,8 @@
     "submittedLeads": "Solicitudes enviadas",
     "viewResults": "Ver mis opciones",
     "updateProfile": "Actualizar perfil",
+    "completed": "Completada",
+    "oneFunded": "¡Uno financiado!",
     "status": {
       "submitted": "Enviada",
       "pending": "En revisión",
@@ -227,6 +233,19 @@
     "noLeads": "No hay solicitudes todavía.",
     "markFunded": "Marcar financiado",
     "markDeclined": "Marcar declinado",
+    "declined": "Declinados",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "page": "Página",
+    "of": "de",
+    "pendingLabel": "pendiente",
+    "updateError": "Error al actualizar. Intenta de nuevo.",
+    "status": {
+      "submitted": "Enviado",
+      "funded": "¡Financiado!",
+      "declined": "Declinado",
+      "pending": "Pendiente"
+    },
     "table": {
       "business": "Negocio",
       "owner": "Dueño",

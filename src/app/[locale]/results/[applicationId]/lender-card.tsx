@@ -50,12 +50,12 @@ export function LenderCard({ match, lender, locale }: LenderCardProps) {
 
       if (!res.ok) {
         const data = (await res.json()) as { error?: string };
-        throw new Error(data.error ?? 'Error al enviar la solicitud');
+        throw new Error(data.error ?? t('submitError'));
       }
 
       setSubmitted(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error desconocido');
+      setError(err instanceof Error ? err.message : t('unknownError'));
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ export function LenderCard({ match, lender, locale }: LenderCardProps) {
   const oddsLabel = getApprovalOddsLabel(match.approvalOdds, locale);
 
   return (
-    <Card className="relative overflow-hidden border-gray-200 hover:border-fondeo-green-300 transition-colors">
+    <Card className="relative overflow-hidden border-gray-200 dark:border-gray-800 dark:bg-gray-900 hover:border-fondeo-green-300 dark:hover:border-fondeo-green-700 transition-colors">
       {/* Top accent */}
       <div
         className={`h-1 w-full ${
@@ -80,9 +80,9 @@ export function LenderCard({ match, lender, locale }: LenderCardProps) {
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h3 className="text-lg font-bold text-gray-900">{match.lenderName}</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">{match.lenderName}</h3>
             {lender && (
-              <p className="text-sm text-gray-500 mt-0.5 leading-snug">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 leading-snug">
                 {locale === 'es' ? lender.descriptionEs : lender.descriptionEn}
               </p>
             )}
@@ -97,21 +97,21 @@ export function LenderCard({ match, lender, locale }: LenderCardProps) {
         {/* Lender stats row */}
         <div className="grid grid-cols-2 gap-3">
           {match.estimatedAmount && (
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center gap-1 text-gray-500 text-xs mb-1">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs mb-1">
                 <DollarSign className="h-3 w-3" />
                 {locale === 'es' ? 'Monto estimado' : 'Est. Amount'}
               </div>
-              <p className="font-semibold text-gray-900 text-sm">{match.estimatedAmount}</p>
+              <p className="font-semibold text-gray-900 dark:text-white text-sm">{match.estimatedAmount}</p>
             </div>
           )}
           {(lender?.fundingSpeed ?? lender?.fundingSpeedEs ?? lender?.fundingSpeedEn) && (
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center gap-1 text-gray-500 text-xs mb-1">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs mb-1">
                 <Clock className="h-3 w-3" />
                 {t('fundingSpeed')}
               </div>
-              <p className="font-semibold text-gray-900 text-sm">
+              <p className="font-semibold text-gray-900 dark:text-white text-sm">
                 {lender.fundingSpeedEs && lender.fundingSpeedEn
                   ? (locale === 'es' ? lender.fundingSpeedEs : lender.fundingSpeedEn)
                   : lender.fundingSpeed}
@@ -123,7 +123,7 @@ export function LenderCard({ match, lender, locale }: LenderCardProps) {
         {/* Products */}
         {lender?.products && (
           <div>
-            <p className="text-xs text-gray-500 mb-2">{t('products')}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{t('products')}</p>
             <div className="flex flex-wrap gap-1.5">
               {lender.products.map((product: string) => (
                 <span
@@ -176,7 +176,7 @@ export function LenderCard({ match, lender, locale }: LenderCardProps) {
                 </>
               )}
             </Button>
-            <p className="text-xs text-gray-400 text-center">{t('applyNote')}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 text-center">{t('applyNote')}</p>
           </div>
         )}
 

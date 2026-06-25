@@ -55,6 +55,8 @@
     "next": "Next",
     "back": "Back",
     "submit": "See my options",
+    "submitError": "Error processing your request",
+    "unknownError": "Unknown error. Please try again.",
     "step1": {
       "title": "Your Business",
       "businessName": "Business name",
@@ -191,7 +193,9 @@
     "reqTime": "3+ months in operation",
     "reqCredit": "Credit score 500+",
     "reapplyLink": "Update my application when ready",
-    "lenderDisclosure": "Fondeo is a loan referral service, not a lender. We may receive referral fees when a loan is funded."
+    "lenderDisclosure": "Fondeo is a loan referral service, not a lender. We may receive referral fees when a loan is funded.",
+    "submitError": "Error submitting application",
+    "unknownError": "Unknown error"
   },
   "dashboard": {
     "title": "My Dashboard",
@@ -204,6 +208,8 @@
     "submittedLeads": "Submitted Leads",
     "viewResults": "View My Options",
     "updateProfile": "Update Profile",
+    "completed": "Completed",
+    "oneFunded": "One funded!",
     "status": {
       "submitted": "Submitted",
       "pending": "Under review",
@@ -227,6 +233,19 @@
     "noLeads": "No leads yet.",
     "markFunded": "Mark Funded",
     "markDeclined": "Mark Declined",
+    "declined": "Declined",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "pendingLabel": "pending",
+    "updateError": "Update failed. Please try again.",
+    "status": {
+      "submitted": "Submitted",
+      "funded": "Funded!",
+      "declined": "Declined",
+      "pending": "Pending"
+    },
     "table": {
       "business": "Business",
       "owner": "Owner",

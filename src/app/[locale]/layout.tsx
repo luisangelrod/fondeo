@@ -3,13 +3,14 @@ import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
+import { ThemeProvider } from '@/components/theme-provider'
 import '../globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Fondeo — Financiamiento para tu negocio',
-  description: 'Encuentra el préstamo empresarial ideal. Sin spam. Sin sorpresas.',
+  title: 'Fondeo',
+  description: 'Find the ideal business loan. No spam. No surprises.',
 }
 
 export default async function LocaleLayout({
@@ -23,11 +24,13 @@ export default async function LocaleLayout({
   const messages = await getMessages()
   return (
     <ClerkProvider>
-      <html lang={locale}>
-        <body className={inter.className}>
-          <NextIntlClientProvider messages={messages}>
-            {children}
-          </NextIntlClientProvider>
+      <html lang={locale} suppressHydrationWarning>
+        <body className={`${inter.className} bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100`}>
+          <ThemeProvider>
+            <NextIntlClientProvider messages={messages}>
+              {children}
+            </NextIntlClientProvider>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

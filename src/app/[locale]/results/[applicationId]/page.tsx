@@ -63,14 +63,14 @@ export default async function ResultsPage({ params }: Props) {
   const redFlagsLabel = t('redFlags')
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-6">
             <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">F</span>
             </div>
-            <span className="font-bold text-xl text-gray-900">Fondeo</span>
+            <span className="font-bold text-xl text-gray-900 dark:text-white">Fondeo</span>
           </div>
           {/* Big score number */}
           <div className={`text-8xl font-bold ${scoreColorClass} mb-1 leading-none`}>{score}</div>
@@ -93,12 +93,12 @@ export default async function ResultsPage({ params }: Props) {
           {/* Contextual score label */}
           <div className={`font-semibold text-base ${scoreColorClass} mb-4`}>{scoreLabel}</div>
 
-          <p className="text-gray-600 max-w-md mx-auto text-sm leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto text-sm leading-relaxed">
             {qualification.summary as string}
           </p>
 
           {/* Anti-spam pill */}
-          <div className="inline-flex items-center gap-1.5 mt-5 text-xs text-gray-400 bg-gray-100 rounded-full px-3 py-1.5">
+          <div className="inline-flex items-center gap-1.5 mt-5 text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1.5">
             <Shield size={11} />
             {locale === 'es'
               ? 'Solo tú decides qué prestamista recibe tu información.'
@@ -143,13 +143,13 @@ export default async function ResultsPage({ params }: Props) {
         )}
 
         {strengths.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-4">
-            <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 sm:p-6 mb-4">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <TrendingUp size={18} className="text-fondeo-green-600" /> {strengthsLabel}
             </h3>
             <ul className="space-y-2">
               {strengths.map((s, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                   <CheckCircle size={14} className="text-fondeo-green-600 mt-0.5 shrink-0" />{s}
                 </li>
               ))}
@@ -158,13 +158,13 @@ export default async function ResultsPage({ params }: Props) {
         )}
 
         {redFlags.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 sm:p-6">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <AlertCircle size={18} className="text-yellow-500" /> {redFlagsLabel}
             </h3>
             <ul className="space-y-2">
               {redFlags.map((f, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
                   <AlertCircle size={14} className="text-yellow-500 mt-0.5 shrink-0" />{f}
                 </li>
               ))}

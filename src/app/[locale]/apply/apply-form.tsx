@@ -177,24 +177,24 @@ function Step1({ defaultValues, onNext }: { defaultValues: Partial<AllFormData>;
   return (
     <form onSubmit={handleSubmit(onNext)} className="space-y-5">
       <div>
-        <Label htmlFor="businessName">{t('step1.businessName')} *</Label>
+        <Label htmlFor="businessName" className="dark:text-gray-200">{t('step1.businessName')} *</Label>
         <Input
           id="businessName"
           placeholder={t('step1.businessNamePlaceholder')}
-          className={`mt-1 ${errors.businessName ? 'border-red-500' : ''}`}
+          className={`mt-1 text-base dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${errors.businessName ? 'border-red-500' : ''}`}
           {...register('businessName')}
         />
         <FieldError message={errors.businessName?.message} />
       </div>
 
       <div>
-        <Label htmlFor="businessType">{t('step1.businessType')} *</Label>
+        <Label htmlFor="businessType" className="dark:text-gray-200">{t('step1.businessType')} *</Label>
         <Controller
           control={control}
           name="businessType"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger id="businessType" className={`mt-1 ${errors.businessType ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="businessType" className={`mt-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${errors.businessType ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step1.businessTypePlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -209,13 +209,13 @@ function Step1({ defaultValues, onNext }: { defaultValues: Partial<AllFormData>;
       </div>
 
       <div>
-        <Label htmlFor="timeInBusiness">{t('step1.timeInBusiness')} *</Label>
+        <Label htmlFor="timeInBusiness" className="dark:text-gray-200">{t('step1.timeInBusiness')} *</Label>
         <Controller
           control={control}
           name="timeInBusiness"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger id="timeInBusiness" className={`mt-1 ${errors.timeInBusiness ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="timeInBusiness" className={`mt-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${errors.timeInBusiness ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step1.timeInBusinessPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -230,13 +230,13 @@ function Step1({ defaultValues, onNext }: { defaultValues: Partial<AllFormData>;
       </div>
 
       <div>
-        <Label htmlFor="state">{t('step1.state')} *</Label>
+        <Label htmlFor="state" className="dark:text-gray-200">{t('step1.state')} *</Label>
         <Controller
           control={control}
           name="state"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger id="state" className={`mt-1 ${errors.state ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="state" className={`mt-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${errors.state ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step1.statePlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -292,13 +292,13 @@ function Step2({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
   return (
     <form onSubmit={handleSubmit(onNext)} className="space-y-5">
       <div>
-        <Label htmlFor="monthlyRevenue">{t('step2.monthlyRevenue')} *</Label>
+        <Label htmlFor="monthlyRevenue" className="dark:text-gray-200">{t('step2.monthlyRevenue')} *</Label>
         <Controller
           control={control}
           name="monthlyRevenue"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger id="monthlyRevenue" className={`mt-1 ${errors.monthlyRevenue ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="monthlyRevenue" className={`mt-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${errors.monthlyRevenue ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step2.monthlyRevenuePlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -313,13 +313,13 @@ function Step2({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
       </div>
 
       <div>
-        <Label htmlFor="revenueConsistency">{t('step2.revenueConsistency')} *</Label>
+        <Label htmlFor="revenueConsistency" className="dark:text-gray-200">{t('step2.revenueConsistency')} *</Label>
         <Controller
           control={control}
           name="revenueConsistency"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger id="revenueConsistency" className={`mt-1 ${errors.revenueConsistency ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="revenueConsistency" className={`mt-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${errors.revenueConsistency ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step2.revenueConsistencyPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -391,10 +391,10 @@ function Step3({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
   return (
     <form onSubmit={handleSubmit(onNext)} className="space-y-5">
       <div>
-        <Label htmlFor="loanPurpose">{t('step3.loanPurpose')} *</Label>
+        <Label htmlFor="loanPurpose" className="dark:text-gray-200">{t('step3.loanPurpose')} *</Label>
         <Controller control={control} name="loanPurpose" render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger id="loanPurpose" className={`mt-1 ${errors.loanPurpose ? 'border-red-500' : ''}`}>
+            <SelectTrigger id="loanPurpose" className={`mt-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${errors.loanPurpose ? 'border-red-500' : ''}`}>
               <SelectValue placeholder={t('step3.loanPurposePlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -406,10 +406,10 @@ function Step3({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
       </div>
 
       <div>
-        <Label htmlFor="loanAmount">{t('step3.loanAmount')} *</Label>
+        <Label htmlFor="loanAmount" className="dark:text-gray-200">{t('step3.loanAmount')} *</Label>
         <Controller control={control} name="loanAmount" render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger id="loanAmount" className={`mt-1 ${errors.loanAmount ? 'border-red-500' : ''}`}>
+            <SelectTrigger id="loanAmount" className={`mt-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${errors.loanAmount ? 'border-red-500' : ''}`}>
               <SelectValue placeholder={t('step3.loanAmountPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -421,10 +421,10 @@ function Step3({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
       </div>
 
       <div>
-        <Label htmlFor="urgency">{t('step3.urgency')} *</Label>
+        <Label htmlFor="urgency" className="dark:text-gray-200">{t('step3.urgency')} *</Label>
         <Controller control={control} name="urgency" render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger id="urgency" className={`mt-1 ${errors.urgency ? 'border-red-500' : ''}`}>
+            <SelectTrigger id="urgency" className={`mt-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${errors.urgency ? 'border-red-500' : ''}`}>
               <SelectValue placeholder={t('step3.urgencyPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -483,45 +483,45 @@ function Step4({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
   return (
     <form onSubmit={handleSubmit(onNext)} className="space-y-5">
       <div>
-        <Label htmlFor="ownerName">{t('step4.ownerName')} *</Label>
+        <Label htmlFor="ownerName" className="dark:text-gray-200">{t('step4.ownerName')} *</Label>
         <Input
           id="ownerName"
           placeholder={t('step4.ownerNamePlaceholder')}
-          className={`mt-1 ${errors.ownerName ? 'border-red-500' : ''}`}
+          className={`mt-1 text-base dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${errors.ownerName ? 'border-red-500' : ''}`}
           {...register('ownerName')}
         />
         <FieldError message={errors.ownerName?.message} />
       </div>
 
       <div>
-        <Label htmlFor="email">{t('step4.email')} *</Label>
+        <Label htmlFor="email" className="dark:text-gray-200">{t('step4.email')} *</Label>
         <Input
           id="email"
           type="email"
           placeholder={t('step4.emailPlaceholder')}
-          className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
+          className={`mt-1 text-base dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${errors.email ? 'border-red-500' : ''}`}
           {...register('email')}
         />
         <FieldError message={errors.email?.message} />
       </div>
 
       <div>
-        <Label htmlFor="phone">{t('step4.phone')} *</Label>
+        <Label htmlFor="phone" className="dark:text-gray-200">{t('step4.phone')} *</Label>
         <Input
           id="phone"
           type="tel"
           placeholder={t('step4.phonePlaceholder')}
-          className={`mt-1 ${errors.phone ? 'border-red-500' : ''}`}
+          className={`mt-1 text-base dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${errors.phone ? 'border-red-500' : ''}`}
           {...register('phone')}
         />
         <FieldError message={errors.phone?.message} />
       </div>
 
       <div>
-        <Label htmlFor="creditScoreRange">{t('step4.creditScore')} *</Label>
+        <Label htmlFor="creditScoreRange" className="dark:text-gray-200">{t('step4.creditScore')} *</Label>
         <Controller control={control} name="creditScoreRange" render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger id="creditScoreRange" className={`mt-1 ${errors.creditScoreRange ? 'border-red-500' : ''}`}>
+            <SelectTrigger id="creditScoreRange" className={`mt-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white ${errors.creditScoreRange ? 'border-red-500' : ''}`}>
               <SelectValue placeholder={t('step4.creditScorePlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -715,14 +715,14 @@ export function ApplyForm() {
 
         if (!res.ok) {
           const errorData = await res.json() as { error?: string };
-          throw new Error(errorData.error ?? 'Error al procesar tu solicitud');
+          throw new Error(errorData.error ?? t('submitError'));
         }
 
         const { applicationId } = await res.json() as { applicationId: number };
         router.push(`/results/${applicationId}`);
       } catch (err) {
         setSubmitError(
-          err instanceof Error ? err.message : 'Error desconocido. Intenta de nuevo.'
+          err instanceof Error ? err.message : t('unknownError')
         );
         setIsSubmitting(false);
       }
@@ -740,14 +740,14 @@ export function ApplyForm() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
       {/* Progress header */}
-      <div className="bg-gray-50 px-6 py-4 border-b border-gray-100">
+      <div className="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b border-gray-100 dark:border-gray-700">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {t('step')} {currentStep} {t('of')} {TOTAL_STEPS}
           </span>
-          <span className="text-sm text-gray-500">{Math.round(progress)}%</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">{Math.round(progress)}%</span>
         </div>
         <Progress value={progress} className="h-2" />
 
@@ -789,7 +789,7 @@ export function ApplyForm() {
 
       {/* Step content */}
       <div className="p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-5">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-5">
           {stepLabels[currentStep - 1]}
         </h2>
 

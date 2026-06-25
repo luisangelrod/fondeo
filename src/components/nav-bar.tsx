@@ -6,6 +6,8 @@ import { Link, usePathname } from '@/navigation';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { FondeoLogo } from './fondeo-logo';
+import { ThemeToggle } from './theme-toggle';
 
 interface NavBarProps {
   locale: string;
@@ -18,14 +20,11 @@ export function NavBar({ locale }: NavBarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm dark:bg-gray-900 dark:border-gray-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link
-          href="/"
-          className="text-2xl font-bold text-fondeo-green-800 hover:text-fondeo-green-700 transition-colors"
-        >
-          Fondeo
+        <Link href="/">
+          <FondeoLogo size={32} />
         </Link>
 
         {/* Desktop nav */}
@@ -34,14 +33,16 @@ export function NavBar({ locale }: NavBarProps) {
           <Link
             href={pathname}
             locale={otherLocale}
-            className="text-sm text-gray-500 hover:text-fondeo-green-700 transition-colors px-2 py-1 rounded border border-gray-200 hover:border-fondeo-green-300"
+            className="text-sm text-gray-500 hover:text-fondeo-green-700 transition-colors px-2 py-1 rounded border border-gray-200 hover:border-fondeo-green-300 dark:text-gray-300 dark:hover:text-white dark:border-gray-700 dark:hover:border-gray-500"
           >
             {locale === 'es' ? 'English' : 'Español'}
           </Link>
 
+          <ThemeToggle />
+
           <SignedIn>
             <Link href="/dashboard">
-              <Button variant="ghost" size="sm" className="text-gray-600">
+              <Button variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300 dark:hover:text-white">
                 {t('dashboard')}
               </Button>
             </Link>
@@ -50,7 +51,7 @@ export function NavBar({ locale }: NavBarProps) {
 
           <SignedOut>
             <Link href="/sign-in">
-              <Button variant="ghost" size="sm" className="text-gray-600">
+              <Button variant="ghost" size="sm" className="text-gray-600 dark:text-gray-300 dark:hover:text-white">
                 {t('signIn')}
               </Button>
             </Link>
@@ -67,7 +68,7 @@ export function NavBar({ locale }: NavBarProps) {
 
         {/* Mobile menu button */}
         <button
-          className="md:hidden p-2 rounded-md text-gray-600 hover:text-fondeo-green-700"
+          className="md:hidden p-2 rounded-md text-gray-600 hover:text-fondeo-green-700 dark:text-gray-400 dark:hover:text-white"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -77,11 +78,11 @@ export function NavBar({ locale }: NavBarProps) {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 space-y-2">
+        <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 px-4 py-3 space-y-2">
           <Link
             href={pathname}
             locale={otherLocale}
-            className="block text-sm text-gray-500 py-2"
+            className="block text-sm text-gray-500 dark:text-gray-300 py-2"
             onClick={() => setMobileOpen(false)}
           >
             {locale === 'es' ? 'English' : 'Español'}
@@ -89,7 +90,7 @@ export function NavBar({ locale }: NavBarProps) {
           <SignedIn>
             <Link
               href="/dashboard"
-              className="block text-sm text-gray-600 py-2"
+              className="block text-sm text-gray-600 dark:text-gray-300 py-2"
               onClick={() => setMobileOpen(false)}
             >
               {t('dashboard')}
@@ -98,7 +99,7 @@ export function NavBar({ locale }: NavBarProps) {
           <SignedOut>
             <Link
               href="/sign-in"
-              className="block text-sm text-gray-600 py-2"
+              className="block text-sm text-gray-600 dark:text-gray-300 py-2"
               onClick={() => setMobileOpen(false)}
             >
               {t('signIn')}

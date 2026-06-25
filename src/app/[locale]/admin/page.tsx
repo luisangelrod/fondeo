@@ -161,7 +161,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
               </p>
               {pendingCommissionEst > 0 && (
                 <p className="text-xs text-gray-400 mt-1">
-                  + est. ${Math.round(pendingCommissionEst).toLocaleString()} pendiente
+                  + est. ${Math.round(pendingCommissionEst).toLocaleString()} {t('pendingLabel')}
                 </p>
               )}
             </CardContent>
@@ -190,10 +190,10 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
                 {t('submittedLeads')}
               </h2>
               <div className="flex gap-2">
-                <Badge variant="success">{fundedLeads.length} financiados</Badge>
-                <Badge variant="warning">{pendingLeads.length} pendientes</Badge>
+                <Badge variant="success">{fundedLeads.length} {t('funded')}</Badge>
+                <Badge variant="warning">{pendingLeads.length} {t('pending')}</Badge>
                 {declinedLeads.length > 0 && (
-                  <Badge variant="default">{declinedLeads.length} declinados</Badge>
+                  <Badge variant="default">{declinedLeads.length} {t('declined')}</Badge>
                 )}
               </div>
             </div>
@@ -205,15 +205,15 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
         <div className="flex gap-4 justify-center mt-8">
           {page > 1 && (
             <a href={`?page=${page - 1}`} className="text-primary underline">
-              ← Anterior / Previous
+              ← {t('previous')}
             </a>
           )}
           <span className="text-muted-foreground">
-            Página {page} de {totalPages}
+            {t('page')} {page} {t('of')} {totalPages}
           </span>
           {page < totalPages && (
             <a href={`?page=${page + 1}`} className="text-primary underline">
-              Siguiente / Next →
+              {t('next')} →
             </a>
           )}
         </div>

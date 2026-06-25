@@ -2,6 +2,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
 import { Link as LocaleLink } from '@/navigation'
 import { ArrowRight, Shield, Zap, Users, CheckCircle } from 'lucide-react'
+import { FondeoLogo } from '@/components/fondeo-logo'
 
 export default function HomePage() {
   const t = useTranslations()
@@ -9,25 +10,19 @@ export default function HomePage() {
   const otherLocale = locale === 'es' ? 'en' : 'es'
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white dark:bg-gray-950">
       {/* Nav */}
-      <nav className="border-b border-gray-100 px-6 py-4 flex items-center justify-between max-w-6xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-fondeo-green-700 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">F</span>
-          </div>
-          <span className="font-bold text-xl text-gray-900">Fondeo</span>
-        </div>
+      <nav className="border-b border-gray-100 dark:border-gray-800 px-4 sm:px-6 py-4 flex items-center justify-between max-w-6xl mx-auto">
+        <FondeoLogo size={28} />
         <div className="flex items-center gap-4">
-          {/* Language toggle */}
           <LocaleLink
             href="/"
             locale={otherLocale}
-            className="text-sm text-gray-500 hover:text-gray-900 border border-gray-200 px-3 py-1.5 rounded-lg transition"
+            className="text-sm text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-gray-700 px-3 py-1.5 rounded-lg transition"
           >
             {t('hero.languageToggle')}
           </LocaleLink>
-          <Link href="/apply" className="text-gray-600 hover:text-gray-900 text-sm">
+          <Link href="/apply" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white text-sm">
             {t('nav.apply')}
           </Link>
           <Link
@@ -40,33 +35,35 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="max-w-6xl mx-auto px-6 pt-20 pb-24">
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 text-sm px-3 py-1 rounded-full mb-6">
-            <CheckCircle size={14} />
-            <span>{t('hero.badge')}</span>
-          </div>
-          <h1 className="text-5xl font-bold text-gray-900 leading-tight mb-6">
-            {t('hero.headline')}
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            {t('hero.subheadline')}
-          </p>
-          <div className="flex flex-wrap items-center gap-4">
-            <Link
-              href="/apply"
-              className="inline-flex items-center gap-2 bg-fondeo-green-700 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-fondeo-green-800 transition"
-            >
-              {t('hero.cta')} <ArrowRight size={20} />
-            </Link>
-            <span className="text-sm text-gray-500">{t('hero.ctaSubtext')}</span>
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-24">
+        <div className="flex flex-col lg:flex-row max-w-3xl">
+          <div>
+            <div className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 text-sm px-3 py-1 rounded-full mb-6">
+              <CheckCircle size={14} />
+              <span>{t('hero.badge')}</span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
+              {t('hero.headline')}
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+              {t('hero.subheadline')}
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="/apply"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-fondeo-green-700 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-fondeo-green-800 transition"
+              >
+                {t('hero.cta')} <ArrowRight size={20} />
+              </Link>
+              <span className="text-sm text-gray-500 dark:text-gray-400">{t('hero.ctaSubtext')}</span>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Trust Signals */}
-      <section className="border-y border-gray-100 bg-gray-50 py-8">
-        <div className="max-w-6xl mx-auto px-6">
+      <section className="border-y border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">
             <span>✓ {locale === 'es' ? 'Gratis para negocios' : 'Free for businesses'}</span>
             <span>✓ {locale === 'es' ? 'Sin llamadas spam' : 'No spam calls'}</span>
@@ -76,19 +73,19 @@ export default function HomePage() {
       </section>
 
       {/* Pain Points */}
-      <section className="bg-white py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t('pain.title')}</h2>
+      <section className="bg-white dark:bg-gray-950 py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12 text-center">{t('pain.title')}</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { title: t('pain.p1Title'), desc: t('pain.p1Desc'), icon: '🏦' },
               { title: t('pain.p2Title'), desc: t('pain.p2Desc'), icon: '📵' },
               { title: t('pain.p3Title'), desc: t('pain.p3Desc'), icon: '📊' },
             ].map((item, i) => (
-              <div key={i} className="bg-gray-50 p-6 rounded-xl border border-gray-100">
+              <div key={i} className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700">
                 <div className="text-3xl mb-4">{item.icon}</div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -96,9 +93,9 @@ export default function HomePage() {
       </section>
 
       {/* How it works */}
-      <section className="bg-gray-50 py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t('howItWorks.title')}</h2>
+      <section className="bg-gray-50 dark:bg-gray-900 py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12 text-center">{t('howItWorks.title')}</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { step: '01', title: t('howItWorks.step1Title'), desc: t('howItWorks.step1Desc'), icon: <Users size={24} className="text-fondeo-green-700" /> },
@@ -106,12 +103,12 @@ export default function HomePage() {
               { step: '03', title: t('howItWorks.step3Title'), desc: t('howItWorks.step3Desc'), icon: <Zap size={24} className="text-fondeo-green-700" /> },
             ].map((item, i) => (
               <div key={i} className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-fondeo-green-50 rounded-2xl mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-fondeo-green-50 dark:bg-fondeo-green-950 rounded-2xl mb-4">
                   {item.icon}
                 </div>
                 <div className="text-fondeo-green-700 font-mono text-sm mb-2">{item.step}</div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -120,7 +117,7 @@ export default function HomePage() {
 
       {/* Anti-spam promise */}
       <section className="bg-fondeo-green-700 py-16">
-        <div className="max-w-3xl mx-auto px-6 text-center">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <Shield size={40} className="text-white mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-white mb-4">{t('antiSpam.title')}</h2>
           <p className="text-fondeo-green-100 text-lg leading-relaxed">{t('antiSpam.desc')}</p>
@@ -128,13 +125,13 @@ export default function HomePage() {
       </section>
 
       {/* Bottom CTA */}
-      <section className="py-20">
-        <div className="max-w-2xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('hero.ctaBottom')}</h2>
-          <p className="text-gray-600 mb-8">{t('hero.ctaBottomSub')}</p>
+      <section className="py-20 dark:bg-gray-950">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{t('hero.ctaBottom')}</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-8">{t('hero.ctaBottomSub')}</p>
           <Link
             href="/apply"
-            className="inline-flex items-center gap-2 bg-fondeo-green-700 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-fondeo-green-800 transition"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-fondeo-green-700 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-fondeo-green-800 transition"
           >
             {t('hero.ctaBottomBtn')} <ArrowRight size={20} />
           </Link>
@@ -142,8 +139,8 @@ export default function HomePage() {
       </section>
 
       {/* Legal Disclosure */}
-      <section className="bg-gray-50 py-8 border-t border-gray-100">
-        <div className="max-w-3xl mx-auto px-6">
+      <section className="bg-gray-50 dark:bg-gray-900 py-8 border-t border-gray-100 dark:border-gray-800">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <p className="text-xs text-gray-400 text-center leading-relaxed">
             {locale === 'es'
               ? 'Fondeo es un servicio de referido de préstamos, no un prestamista. Podemos recibir honorarios de referido de los prestamistas cuando se otorga un préstamo. Todas las decisiones de préstamo son tomadas por los prestamistas, no por Fondeo.'
@@ -153,19 +150,14 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 py-8">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-fondeo-green-700 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-xs">F</span>
-            </div>
-            <span className="font-semibold text-gray-900">Fondeo</span>
-          </div>
+      <footer className="border-t border-gray-100 dark:border-gray-800 dark:bg-gray-900 py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <FondeoLogo size={24} />
           <div className="flex items-center gap-4">
-            <Link href={`/${locale}/privacy`} className="text-xs text-gray-400 hover:text-gray-600 transition">
+            <Link href={`/${locale}/privacy`} className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
               {locale === 'es' ? 'Política de Privacidad' : 'Privacy Policy'}
             </Link>
-            <Link href={`/${locale}/terms`} className="text-xs text-gray-400 hover:text-gray-600 transition">
+            <Link href={`/${locale}/terms`} className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
               {locale === 'es' ? 'Términos de Servicio' : 'Terms of Service'}
             </Link>
           </div>

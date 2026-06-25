@@ -67,7 +67,7 @@ export function AdminTable({ leads: initialLeads }: AdminTableProps) {
       );
     } catch (err) {
       console.error(err);
-      alert('Error al actualizar. Intenta de nuevo.');
+      alert(t('updateError'));
     } finally {
       setLoadingId(null);
     }
@@ -84,10 +84,10 @@ export function AdminTable({ leads: initialLeads }: AdminTableProps) {
 
   const statusLabel = (status: string) => {
     const map: Record<string, string> = {
-      submitted: 'Enviado',
-      funded: '¡Financiado!',
-      declined: 'Declinado',
-      pending: 'Pendiente',
+      submitted: t('status.submitted'),
+      funded: t('status.funded'),
+      declined: t('status.declined'),
+      pending: t('status.pending'),
     };
     return map[status] ?? status;
   };
