@@ -1,3 +1,4 @@
+/* eslint-disable */
 // src/mocks/clerk-client.tsx
 // Dev-only mock for @clerk/nextjs — allows UI testing without real Clerk credentials
 'use client';

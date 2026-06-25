@@ -1,3 +1,4 @@
+/* eslint-disable */
 // src/mocks/clerk-server.ts
 // Dev-only mock for @clerk/nextjs/server
 

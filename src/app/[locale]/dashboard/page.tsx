@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { auth } from '@/lib/auth-server';
 import { redirect } from 'next/navigation';
 import { eq, desc } from 'drizzle-orm';

@@ -27,7 +27,7 @@ export default async function AdminPage({ params, searchParams }: AdminPageProps
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'admin' });
 
-  const sp = await (searchParams ?? Promise.resolve({}));
+  const sp = await (searchParams ?? Promise.resolve({} as { page?: string }));
   const page = Number(sp?.page ?? 1);
   const PAGE_SIZE = 50;
   const offset = (page - 1) * PAGE_SIZE;

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import Link from 'next/link'
 import { auth } from '@/lib/auth-server'
 import { getTranslations } from 'next-intl/server'
 import { db } from '@/db'
@@ -8,6 +10,7 @@ import { LENDERS } from '@/lib/lenders'
 import { getLendScoreLabel, getLendScoreColorClass } from '@/lib/utils'
 import { CheckCircle, AlertCircle, TrendingUp, Shield } from 'lucide-react'
 import { LenderCard } from './lender-card'
+import { FondeoLogo } from '@/components/fondeo-logo'
 
 // Sort order: best approval odds first
 const ODDS_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 }
@@ -66,11 +69,8 @@ export default async function ResultsPage({ params }: Props) {
     <main className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">F</span>
-            </div>
-            <span className="font-bold text-xl text-gray-900 dark:text-white">Fondeo</span>
+          <div className="flex items-center justify-center mb-6">
+            <FondeoLogo size={32} />
           </div>
           {/* Big score number */}
           <div className={`text-8xl font-bold ${scoreColorClass} mb-1 leading-none`}>{score}</div>
@@ -136,9 +136,9 @@ export default async function ResultsPage({ params }: Props) {
                 <li>{t('reqCredit')}</li>
               </ul>
             </div>
-            <a href="/apply" className="inline-block mt-4 text-sm font-medium text-amber-900 underline">
+            <Link href="/apply" className="inline-block mt-4 text-sm font-medium text-amber-900 underline">
               {t('reapplyLink')}
-            </a>
+            </Link>
           </div>
         )}
 

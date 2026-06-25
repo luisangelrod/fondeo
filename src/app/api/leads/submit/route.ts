@@ -7,14 +7,18 @@ import { businesses, lenderMatches, leadSubmissions } from '@/db/schema';
 import { LENDERS, type LenderSlug } from '@/lib/lenders';
 import { Resend } from 'resend';
 
-if (!process.env.RESEND_API_KEY) {
-  // Non-fatal at module load: warn loudly so the misconfiguration is visible
-  // in startup logs, but don't crash the server — Resend calls are already
-  // wrapped in non-fatal try/catch blocks below.
-  console.warn('[leads/submit] RESEND_API_KEY is not set — email notifications will fail silently');
+// Lazy Resend client — avoids a module-level throw during Next.js static
+// analysis. Email sends are wrapped in non-fatal try/catch blocks below.
+let _resend: Resend | undefined;
+function getResend(): Resend {
+  if (!_resend) {
+    if (!process.env.RESEND_API_KEY) {
+      console.warn('[leads/submit] RESEND_API_KEY is not set — email notifications will fail silently');
+    }
+    _resend = new Resend(process.env.RESEND_API_KEY ?? 'not-configured');
+  }
+  return _resend;
 }
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
  * Escapes the five HTML special characters to prevent injection into the
@@ -138,7 +142,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // Send admin notification email (non-fatal)
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: process.env.RESEND_FROM ?? 'Fondeo <noreply@fondeo.app>',
         to: [adminEmail],
         subject: `🚀 Nueva solicitud: ${escapeHtml(match.business.businessName)} → ${escapeHtml(match.match.lenderName)}`,
@@ -164,7 +168,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // Send borrower confirmation email (non-fatal)
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: process.env.RESEND_FROM ?? 'Fondeo <noreply@fondeo.app>',
         to: [match.business.email],
         subject: `✅ Tu solicitud fue enviada a ${escapeHtml(match.match.lenderName)}`,

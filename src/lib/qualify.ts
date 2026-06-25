@@ -1,14 +1,18 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { z } from 'zod'
 
-// Fail fast at module load — no silent undefined key passed to SDK
-if (!process.env.ANTHROPIC_API_KEY) {
-  throw new Error('ANTHROPIC_API_KEY environment variable is not set')
+// Lazy singleton — defers env-var check to first call so Next.js static
+// analysis during `next build` doesn't error when the key is absent.
+let _client: Anthropic | undefined
+function getClient(): Anthropic {
+  if (!_client) {
+    if (!process.env.ANTHROPIC_API_KEY) {
+      throw new Error('ANTHROPIC_API_KEY environment variable is not set')
+    }
+    _client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  }
+  return _client
 }
-
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-})
 
 export interface BusinessProfile {
   businessName?: string
@@ -196,7 +200,7 @@ Responde ÚNICAMENTE con el objeto JSON. Sin explicaciones, sin markdown, sin ba
 
   const fullPrompt = prompt + '\n' + scoringTable
 
-  const message = await client.messages.create({
+  const message = await getClient().messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 1500,
     temperature: 0,
