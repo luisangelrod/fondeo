@@ -64,29 +64,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Trust / Social Proof Bar */}
+      {/* Trust Signals */}
       <section className="border-y border-gray-100 bg-gray-50 py-8">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-wrap items-center justify-center gap-8 text-center">
-            <div>
-              <div className="text-2xl font-bold text-gray-900">500+</div>
-              <div className="text-xs text-gray-500 mt-0.5">{t('stats.businesses')}</div>
-            </div>
-            <div className="hidden md:block w-px h-8 bg-gray-200" />
-            <div>
-              <div className="text-2xl font-bold text-gray-900">$12M+</div>
-              <div className="text-xs text-gray-500 mt-0.5">{t('stats.funded')}</div>
-            </div>
-            <div className="hidden md:block w-px h-8 bg-gray-200" />
-            <div>
-              <div className="text-2xl font-bold text-gray-900">48 hrs</div>
-              <div className="text-xs text-gray-500 mt-0.5">{t('stats.speed')}</div>
-            </div>
-            <div className="hidden md:block w-px h-8 bg-gray-200" />
-            <div>
-              <div className="text-2xl font-bold text-gray-900">0</div>
-              <div className="text-xs text-gray-500 mt-0.5">{t('stats.spam')}</div>
-            </div>
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">
+            <span>✓ {locale === 'es' ? 'Gratis para negocios' : 'Free for businesses'}</span>
+            <span>✓ {locale === 'es' ? 'Sin llamadas spam' : 'No spam calls'}</span>
+            <span>✓ {locale === 'es' ? 'Resultados en minutos' : 'Results in minutes'}</span>
           </div>
         </div>
       </section>
@@ -157,14 +141,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Legal Disclosure */}
+      <section className="bg-gray-50 py-8 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto px-6">
+          <p className="text-xs text-gray-400 text-center leading-relaxed">
+            {locale === 'es'
+              ? 'Fondeo es un servicio de referido de préstamos, no un prestamista. Podemos recibir honorarios de referido de los prestamistas cuando se otorga un préstamo. Todas las decisiones de préstamo son tomadas por los prestamistas, no por Fondeo.'
+              : 'Fondeo is a loan referral service, not a lender. We may receive referral fees from lenders when a loan is funded. All loan decisions are made by the lenders, not Fondeo.'}
+          </p>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-gray-100 py-8">
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-fondeo-green-700 rounded flex items-center justify-center">
               <span className="text-white font-bold text-xs">F</span>
             </div>
             <span className="font-semibold text-gray-900">Fondeo</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href={`/${locale}/privacy`} className="text-xs text-gray-400 hover:text-gray-600 transition">
+              {locale === 'es' ? 'Política de Privacidad' : 'Privacy Policy'}
+            </Link>
+            <Link href={`/${locale}/terms`} className="text-xs text-gray-400 hover:text-gray-600 transition">
+              {locale === 'es' ? 'Términos de Servicio' : 'Terms of Service'}
+            </Link>
           </div>
           <p className="text-xs text-gray-400">{t('footer.copy')}</p>
         </div>

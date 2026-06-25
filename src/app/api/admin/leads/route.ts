@@ -13,7 +13,7 @@ const updateSchema = z.object({
   commissionPaidAmount: z.string().optional(),
 });
 
-export async function PATCH(req: NextRequest) {
+export async function PATCH(req: NextRequest): Promise<NextResponse> {
   try {
     const { userId } = await auth();
     if (!userId || userId !== process.env.ADMIN_USER_ID) {

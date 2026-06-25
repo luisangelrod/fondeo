@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
+import { checkRateLimit } from '@/lib/rate-limit';
 import { eq, and } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/db';
 import { businesses, aiQualifications, lenderMatches, plaidConnections } from '@/db/schema';
-import { qualifyBusiness, analyzePlaidTransactions } from '@/lib/qualify';
+import { qualifyBusiness, analyzePlaidTransactions, type PlaidSummary } from '@/lib/qualify';
 import { LENDERS, type LenderSlug } from '@/lib/lenders';
-import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
+import { getPlaidClient, fetchAllTransactions } from '@/lib/plaid';
 
 const bodySchema = z.object({
   businessId: z.string().uuid(),
@@ -17,6 +18,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const rateLimit = checkRateLimit(`qualify:${userId}`, 10, 60 * 60 * 1000); // 10 per hour
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: 'Demasiadas solicitudes. Intenta de nuevo más tarde.' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) },
+        }
+      );
     }
 
     // Validate + type-narrow the request body safely (replaces the previous
@@ -39,7 +51,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: 'Business not found' }, { status: 404 });
     }
 
-    let plaidAnalysis = undefined;
+    let plaidAnalysis: PlaidSummary | undefined = undefined;
     const [plaidConn] = await db
       .select()
       .from(plaidConnections)
@@ -48,23 +60,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     if (plaidConn) {
       try {
-        const clientId = process.env.PLAID_CLIENT_ID;
-        const secret = process.env.PLAID_SECRET;
-        if (!clientId) throw new Error('PLAID_CLIENT_ID is not set');
-        if (!secret) throw new Error('PLAID_SECRET is not set');
-
-        const env = (process.env.PLAID_ENV ?? 'sandbox') as keyof typeof PlaidEnvironments;
-        const plaidClient = new PlaidApi(
-          new Configuration({
-            basePath: PlaidEnvironments[env],
-            baseOptions: {
-              headers: {
-                'PLAID-CLIENT-ID': clientId,
-                'PLAID-SECRET': secret,
-              },
-            },
-          })
-        );
+        const plaidClient = getPlaidClient();
 
         const now = new Date();
         const endDate = now.toISOString().split('T')[0]!;
@@ -72,14 +68,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           .toISOString()
           .split('T')[0]!;
 
-        const txnResponse = await plaidClient.transactionsGet({
-          access_token: plaidConn.accessToken,
-          start_date: startDate,
-          end_date: endDate,
-        });
+        const { transactions } = await fetchAllTransactions(
+          plaidClient,
+          plaidConn.accessToken,
+          startDate,
+          endDate,
+        );
 
         plaidAnalysis = analyzePlaidTransactions(
-          txnResponse.data.transactions.map((t) => ({ amount: t.amount, date: t.date }))
+          transactions.map((t) => ({
+            amount: t.amount,
+            date: t.date,
+            name: t.name ?? t.merchant_name ?? '',
+            merchant_name: t.merchant_name ?? '',
+            personal_finance_category: t.personal_finance_category ?? null,
+          }))
         );
       } catch (plaidErr) {
         // Non-fatal: qualification proceeds without Plaid enrichment

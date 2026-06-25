@@ -101,7 +101,7 @@ export async function qualifyBusiness(profile: BusinessProfile): Promise<Qualifi
 PERFIL DEL NEGOCIO:
 - Tipo de negocio: ${profile.businessType}
 - Tiempo en operación: ${profile.timeInBusiness}
-- Ingresos mensuales declarados: ${profile.monthlyRevenue}
+- Ingresos mensuales declarados: ${profile.monthlyRevenue} (rango — usa el límite INFERIOR para ser conservador)
 - Consistencia de ingresos: ${profile.revenueConsistency ?? 'No especificado'}
 - Propósito del préstamo: ${profile.loanPurpose}
 - Monto solicitado: ${profile.loanAmount}
@@ -127,19 +127,22 @@ PRESTAMISTAS DISPONIBLES Y SUS CRITERIOS EXACTOS:
 
   const scoringTable = `TABLA DE PUNTUACIÓN LEND SCORE (aplica exactamente estos puntos):
 Ingresos mensuales:
-  • $50,000+      → 25 pts
-  • $30,000-$49,999 → 22 pts
+  IMPORTANTE: El campo "Ingresos mensuales declarados" es un rango (ej: "$30K-$75K").
+  Usa siempre el LÍMITE INFERIOR del rango para ser conservador.
+  Por ejemplo: "$30K-$75K" → evaluar como $30,000/mes; "$75K+" → evaluar como $75,000/mes.
+  Si hay datos Plaid, usar avgMonthlyDeposits en lugar del declarado.
+  • $75,000+       → 25 pts
+  • $30,000-$74,999 → 22 pts
   • $15,000-$29,999 → 18 pts
   • $8,333-$14,999  → 14 pts
   • $5,000-$8,332   → 10 pts
   • <$5,000         → 3 pts
-  • Si hay datos Plaid, usar avgMonthlyDeposits en lugar del declarado.
 
 Tiempo en operación:
   • 24+ meses   → 25 pts
   • 12-23 meses → 20 pts
   • 6-11 meses  → 12 pts
-  • 3-5 meses   → 6 pts
+  • 3-5 meses / 3-6 meses / 3-6 months → 6 pts (mínimo para Greenbox y OnePark satisfecho)
   • <3 meses    → 0 pts
 
 Crédito:
@@ -149,7 +152,7 @@ Crédito:
   • 550-624      → 12 pts
   • 500-549      → 8 pts
   • <500         → 3 pts
-  • No especificado → 10 pts
+  • No especificado → 3 pts
 
 Plaid / Datos bancarios (solo si hay data Plaid):
   • consistencyScore 8-10 → +15 pts
@@ -244,6 +247,9 @@ Responde ÚNICAMENTE con el objeto JSON. Sin explicaciones, sin markdown, sin ba
 interface PlaidTxn {
   amount: number  // Plaid convention: positive = debit/expense, negative = credit/deposit
   date: string    // YYYY-MM-DD
+  name?: string
+  merchant_name?: string
+  personal_finance_category?: { primary: string } | null
 }
 
 /**
@@ -258,6 +264,26 @@ export function analyzePlaidTransactions(transactions: PlaidTxn[]): PlaidSummary
   const monthly: Record<string, { deposits: number; withdrawals: number }> = {}
   let nsfCount = 0
 
+  // NSF/overdraft detection by transaction name and category — NOT by amount.
+  // The old $25–$39 amount check flagged virtually every small business purchase
+  // (supplies, subscriptions, etc.) as a potential NSF fee, producing false
+  // negatives across the board. Banks always label these fees explicitly in the
+  // transaction name, so name/category matching is both more accurate and
+  // bilingual-safe.
+  const nsfKeywords = [
+    'non-sufficient', 'nsf', 'returned item', 'overdraft fee',
+    'insufficient funds', 'returned payment', 'bounced check',
+    'cargo por fondos insuficientes', 'cargo nsf',
+  ]
+
+  const isNsfFee = (txn: PlaidTxn): boolean => {
+    const name = (txn.name || txn.merchant_name || '').toLowerCase()
+    return (
+      nsfKeywords.some(kw => name.includes(kw)) ||
+      name.includes('overdraft')
+    )
+  }
+
   for (const txn of transactions) {
     const month = txn.date.substring(0, 7) // 'YYYY-MM'
     if (!monthly[month]) monthly[month] = { deposits: 0, withdrawals: 0 }
@@ -266,8 +292,7 @@ export function analyzePlaidTransactions(transactions: PlaidTxn[]): PlaidSummary
       monthly[month].deposits += Math.abs(txn.amount)
     } else {
       monthly[month].withdrawals += txn.amount
-      // Heuristic: NSF fees are typically $25-$39
-      if (txn.amount >= 25 && txn.amount <= 39) nsfCount++
+      if (isNsfFee(txn)) nsfCount++
     }
   }
 

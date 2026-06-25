@@ -25,7 +25,7 @@ export function NavBar({ locale }: NavBarProps) {
           href="/"
           className="text-2xl font-bold text-fondeo-green-800 hover:text-fondeo-green-700 transition-colors"
         >
-          {t('logo')}
+          Fondeo
         </Link>
 
         {/* Desktop nav */}
@@ -36,7 +36,7 @@ export function NavBar({ locale }: NavBarProps) {
             locale={otherLocale}
             className="text-sm text-gray-500 hover:text-fondeo-green-700 transition-colors px-2 py-1 rounded border border-gray-200 hover:border-fondeo-green-300"
           >
-            {t('lang')}
+            {locale === 'es' ? 'English' : 'Español'}
           </Link>
 
           <SignedIn>
@@ -51,7 +51,7 @@ export function NavBar({ locale }: NavBarProps) {
           <SignedOut>
             <Link href="/sign-in">
               <Button variant="ghost" size="sm" className="text-gray-600">
-                {t('signin')}
+                {t('signIn')}
               </Button>
             </Link>
             <Link href="/apply">
@@ -84,7 +84,7 @@ export function NavBar({ locale }: NavBarProps) {
             className="block text-sm text-gray-500 py-2"
             onClick={() => setMobileOpen(false)}
           >
-            {t('lang')}
+            {locale === 'es' ? 'English' : 'Español'}
           </Link>
           <SignedIn>
             <Link
@@ -101,7 +101,7 @@ export function NavBar({ locale }: NavBarProps) {
               className="block text-sm text-gray-600 py-2"
               onClick={() => setMobileOpen(false)}
             >
-              {t('signin')}
+              {t('signIn')}
             </Link>
             <Link
               href="/apply"

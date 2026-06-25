@@ -21,9 +21,14 @@ import {
   getApprovalOddsBadgeVariant,
 } from '@/lib/utils';
 
+type LenderProfileWithLocale = LenderProfile & {
+  fundingSpeedEs?: string;
+  fundingSpeedEn?: string;
+};
+
 interface LenderCardProps {
   match: LenderMatch;
-  lender: LenderProfile | undefined;
+  lender: LenderProfileWithLocale | undefined;
   locale: string;
 }
 
@@ -100,13 +105,17 @@ export function LenderCard({ match, lender, locale }: LenderCardProps) {
               <p className="font-semibold text-gray-900 text-sm">{match.estimatedAmount}</p>
             </div>
           )}
-          {lender?.fundingSpeed && (
+          {(lender?.fundingSpeed ?? lender?.fundingSpeedEs ?? lender?.fundingSpeedEn) && (
             <div className="bg-gray-50 rounded-lg p-3">
               <div className="flex items-center gap-1 text-gray-500 text-xs mb-1">
                 <Clock className="h-3 w-3" />
                 {t('fundingSpeed')}
               </div>
-              <p className="font-semibold text-gray-900 text-sm">{lender.fundingSpeed}</p>
+              <p className="font-semibold text-gray-900 text-sm">
+                {lender.fundingSpeedEs && lender.fundingSpeedEn
+                  ? (locale === 'es' ? lender.fundingSpeedEs : lender.fundingSpeedEn)
+                  : lender.fundingSpeed}
+              </p>
             </div>
           )}
         </div>
@@ -179,7 +188,7 @@ export function LenderCard({ match, lender, locale }: LenderCardProps) {
             rel="noopener noreferrer"
             className="flex items-center gap-1 text-xs text-fondeo-green-700 hover:underline"
           >
-            {locale === 'es' ? 'Portal ISO de' : 'ISO Portal for'} {lender.name}
+            {locale === 'es' ? 'Sitio web de' : 'Visit'} {lender.name}
             <ExternalLink className="h-3 w-3" />
           </a>
         )}

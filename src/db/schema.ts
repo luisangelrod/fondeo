@@ -1,4 +1,4 @@
-import { pgTable, text, integer, timestamp, jsonb, boolean, decimal, uuid } from 'drizzle-orm/pg-core'
+import { pgTable, text, integer, timestamp, jsonb, boolean, decimal, uuid, index, uniqueIndex } from 'drizzle-orm/pg-core'
 
 export const businesses = pgTable('businesses', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -29,7 +29,12 @@ export const plaidConnections = pgTable('plaid_connections', {
   institutionName: text('institution_name'),
   lastSynced: timestamp('last_synced'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-})
+}, (t) => [
+  // itemId must be unique: one Plaid Item per connection. Also the webhook
+  // lookup key — without an index every webhook triggers a full table scan.
+  uniqueIndex('plaid_connections_item_id_idx').on(t.itemId),
+  index('plaid_connections_business_id_idx').on(t.businessId),
+])
 
 export const aiQualifications = pgTable('ai_qualifications', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -42,7 +47,9 @@ export const aiQualifications = pgTable('ai_qualifications', {
   strengths: jsonb('strengths'),
   rawPrompt: text('raw_prompt'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-})
+}, (t) => [
+  index('ai_qualifications_business_id_idx').on(t.businessId),
+])
 
 export const lenderMatches = pgTable('lender_matches', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -57,7 +64,10 @@ export const lenderMatches = pgTable('lender_matches', {
   note: text('note'),
   isVisible: boolean('is_visible').default(true),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-})
+}, (t) => [
+  index('lender_matches_business_id_idx').on(t.businessId),
+  index('lender_matches_qualification_id_idx').on(t.qualificationId),
+])
 
 export const leadSubmissions = pgTable('lead_submissions', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -78,7 +88,11 @@ export const leadSubmissions = pgTable('lead_submissions', {
   confirmationMethod: text('confirmation_method'),
   notes: text('notes'),
   submittedAt: timestamp('submitted_at').defaultNow().notNull(),
-})
+}, (t) => [
+  // businessId + lenderSlug are queried together in the duplicate-guard check
+  index('lead_submissions_business_lender_idx').on(t.businessId, t.lenderSlug),
+  index('lead_submissions_lender_match_id_idx').on(t.lenderMatchId),
+])
 
 // Inferred row types for use across the app
 export type Business = typeof businesses.$inferSelect

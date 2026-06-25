@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { getTranslations } from 'next-intl/server';
 import { db } from '@/db';
 import {
@@ -17,14 +17,20 @@ import { DollarSign, FileText, TrendingUp, Users } from 'lucide-react';
 
 interface AdminPageProps {
   params: Promise<{ locale: string }>;
+  searchParams?: Promise<{ page?: string }>;
 }
 
-export default async function AdminPage({ params }: AdminPageProps) {
+export default async function AdminPage({ params, searchParams }: AdminPageProps) {
   const { userId } = await auth();
   if (!userId) redirect('/sign-in');
 
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'admin' });
+
+  const sp = await (searchParams ?? Promise.resolve({}));
+  const page = Number(sp?.page ?? 1);
+  const PAGE_SIZE = 50;
+  const offset = (page - 1) * PAGE_SIZE;
 
   // Guard: only admin can access this page
   if (userId !== process.env.ADMIN_USER_ID) {
@@ -37,7 +43,7 @@ export default async function AdminPage({ params }: AdminPageProps) {
     );
   }
 
-  // Fetch all lead submissions with business + lender info
+  // Fetch paginated lead submissions with business + lender info
   const rawLeads = await db
     .select({
       submissionId: leadSubmissions.id,
@@ -57,7 +63,9 @@ export default async function AdminPage({ params }: AdminPageProps) {
     .from(leadSubmissions)
     .innerJoin(businesses, eq(leadSubmissions.businessId, businesses.id))
     .innerJoin(lenderMatches, eq(leadSubmissions.lenderMatchId, lenderMatches.id))
-    .orderBy(desc(leadSubmissions.submittedAt));
+    .orderBy(desc(leadSubmissions.submittedAt))
+    .limit(PAGE_SIZE)
+    .offset(offset);
 
   const leads = rawLeads.map((r) => ({
     id: String(r.submissionId),
@@ -73,6 +81,12 @@ export default async function AdminPage({ params }: AdminPageProps) {
     commissionRate: r.commissionRate,
     commissionAmount: r.commissionAmount,
   }));
+
+  // Total count for pagination
+  const [{ count }] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(leadSubmissions);
+  const totalPages = Math.ceil(Number(count) / PAGE_SIZE);
 
   // Aggregate stats
   const totalLeads = leads.length;
@@ -186,6 +200,23 @@ export default async function AdminPage({ params }: AdminPageProps) {
           </CardHeader>
           <AdminTable leads={leads} />
         </Card>
+
+        {/* Pagination */}
+        <div className="flex gap-4 justify-center mt-8">
+          {page > 1 && (
+            <a href={`?page=${page - 1}`} className="text-primary underline">
+              ← Anterior / Previous
+            </a>
+          )}
+          <span className="text-muted-foreground">
+            Página {page} de {totalPages}
+          </span>
+          {page < totalPages && (
+            <a href={`?page=${page + 1}`} className="text-primary underline">
+              Siguiente / Next →
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );

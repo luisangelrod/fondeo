@@ -7,7 +7,7 @@
     "signOut": "Cerrar Sesión"
   },
   "hero": {
-    "badge": "Especialistas en negocios de Puerto Rico",
+    "badge": "Especialistas en negocios de Puerto Rico y la diáspora hispana",
     "headline": "Encuentra el financiamiento que tu negocio merece",
     "subheadline": "Sin spam. Sin sorpresas. Analizamos tu flujo de caja, no solo tu crédito, para encontrar los prestamistas que realmente te aprobarán.",
     "cta": "Empieza Gratis",
@@ -35,11 +35,11 @@
   "howItWorks": {
     "title": "Así funciona",
     "step1Title": "Cuéntanos sobre tu negocio",
-    "step1Desc": "2 minutos. Sin registro previo.",
-    "step2Title": "Conecta tu cuenta bancaria",
-    "step2Desc": "Analizamos tu flujo de caja real, no solo tu crédito.",
-    "step3Title": "Ve tus opciones reales",
-    "step3Desc": "Solo tú decides qué prestamista recibe tu información."
+    "step1Desc": "Comparte información básica: tipo de negocio, ingresos, necesidades del préstamo y datos de contacto. Toma unos 2 minutos.",
+    "step2Title": "Comparte tu historial financiero",
+    "step2Desc": "Opcionalmente conecta tu cuenta bancaria para que analicemos tu flujo de caja real — no solo tu puntuación de crédito.",
+    "step3Title": "Recibe tus opciones reales",
+    "step3Desc": "Solo tú decides qué prestamista recibe tu información. Sin spam. Sin llamadas sorpresa."
   },
   "antiSpam": {
     "title": "Tu información, tu control",
@@ -76,6 +76,7 @@
       },
       "timePeriods": {
         "Under 6 months": "Menos de 6 meses",
+        "3-6 months": "3-6 meses",
         "6-12 months": "6 a 12 meses",
         "1-2 years": "1 a 2 años",
         "2-5 years": "2 a 5 años",
@@ -134,6 +135,7 @@
     },
     "step4": {
       "title": "Información de contacto",
+      "privacyNote": "Tus datos de contacto solo se comparten con el prestamista que tú selecciones.",
       "ownerName": "Nombre completo",
       "ownerNamePlaceholder": "Luis Rodríguez",
       "email": "Correo electrónico",
@@ -159,6 +161,8 @@
       "connected": "¡Cuenta conectada!",
       "connectedBody": "Tu información bancaria ha sido analizada de forma segura.",
       "secure": "Conexión segura con tecnología Plaid. Tus credenciales nunca son almacenadas por nosotros.",
+      "connecting": "Conectando...",
+      "analyzing": "Analizando tu perfil...",
       "skip": "Omitir por ahora (menos opciones)"
     }
   },
@@ -167,7 +171,7 @@
     "scoreLabel": "LendScore",
     "scoreGreat": "Excelente — Múltiples opciones disponibles",
     "scoreGood": "Bueno — Califica para varios productos",
-    "scoreFair": "Regular — Hay opciones disponibles",
+    "scoreFair": "Aceptable — Hay opciones disponibles",
     "scoreLow": "Limitado — Opciones reducidas pero existen",
     "applyWith": "Aplicar con",
     "approvalOdds": "Probabilidad de aprobación",
@@ -179,17 +183,65 @@
     "redFlags": "Lo que debes preparar",
     "privacyNote": "Al hacer clic en 'Aplicar', solo ese prestamista recibirá tu información.",
     "applyNote": "Solo este prestamista recibirá tu información.",
-    "applied": "¡Solicitud enviada!"
+    "applied": "¡Solicitud enviada!",
+    "noMatchTitle": "No encontramos prestamistas en este momento",
+    "noMatchBody": "Tu negocio puede calificar en el futuro. Aquí están los requisitos mínimos:",
+    "requirements": "Requisitos mínimos",
+    "reqRevenue": "$5,000/mes en ingresos (verificado en los últimos 3 meses)",
+    "reqTime": "3+ meses en operación",
+    "reqCredit": "Puntaje de crédito 500+",
+    "reapplyLink": "Actualizar mi solicitud cuando esté listo",
+    "lenderDisclosure": "Fondeo es un servicio de referido de préstamos, no un prestamista. Podemos recibir honorarios de referido cuando se otorga un préstamo."
   },
   "dashboard": {
     "title": "Mi Panel",
     "applications": "Mis solicitudes",
     "noApplications": "Aún no tienes solicitudes. ¡Empieza ahora!",
+    "noApplication": "Aún no tienes una solicitud. ¡Empieza ahora!",
+    "startApplication": "Iniciar solicitud",
+    "lendScore": "LendScore",
+    "applicationStatus": "Estado de solicitud",
+    "submittedLeads": "Solicitudes enviadas",
+    "viewResults": "Ver mis opciones",
+    "updateProfile": "Actualizar perfil",
     "status": {
       "submitted": "Enviada",
       "pending": "En revisión",
       "funded": "Aprobada",
       "declined": "Rechazada"
+    },
+    "table": {
+      "lender": "Prestamista",
+      "submittedDate": "Fecha de envío",
+      "status": "Estatus",
+      "amount": "Monto estimado"
     }
+  },
+  "admin": {
+    "title": "Panel de Administración",
+    "unauthorized": "No tienes autorización para acceder a esta página.",
+    "submittedLeads": "Solicitudes enviadas",
+    "funded": "Financiadas",
+    "commissions": "Comisiones",
+    "pending": "Pendientes",
+    "noLeads": "No hay solicitudes todavía.",
+    "markFunded": "Marcar financiado",
+    "markDeclined": "Marcar declinado",
+    "table": {
+      "business": "Negocio",
+      "owner": "Dueño",
+      "lender": "Prestamista",
+      "submittedDate": "Fecha de envío",
+      "status": "Estatus",
+      "commissionRate": "Tasa de comisión",
+      "commissionAmount": "Comisión ganada",
+      "actions": "Acciones"
+    }
+  },
+  "validation": {
+    "required": "Este campo es requerido",
+    "invalidEmail": "Correo electrónico inválido",
+    "invalidPhone": "Número de teléfono inválido",
+    "selectRequired": "Por favor selecciona una opción"
   }
 }

@@ -35,11 +35,11 @@
   "howItWorks": {
     "title": "How it works",
     "step1Title": "Tell us about your business",
-    "step1Desc": "2 minutes. No signup required.",
-    "step2Title": "Connect your bank account",
-    "step2Desc": "We analyze your real cash flow, not just your credit.",
-    "step3Title": "See your real options",
-    "step3Desc": "Only you decide which lender gets your information."
+    "step1Desc": "Share basic info: business type, revenue, loan needs, and contact details. Takes about 2 minutes.",
+    "step2Title": "Share your financial history",
+    "step2Desc": "Optionally connect your bank account so we can analyze your real cash flow — not just your credit score.",
+    "step3Title": "Get matched with lenders",
+    "step3Desc": "Only you decide which lender gets your information. No spam. No surprise calls."
   },
   "antiSpam": {
     "title": "Your information, your control",
@@ -76,6 +76,7 @@
       },
       "timePeriods": {
         "Under 6 months": "Less than 6 months",
+        "3-6 months": "3-6 months",
         "6-12 months": "6 to 12 months",
         "1-2 years": "1 to 2 years",
         "2-5 years": "2 to 5 years",
@@ -134,6 +135,7 @@
     },
     "step4": {
       "title": "Contact Information",
+      "privacyNote": "Your contact info is only shared with the lender you choose.",
       "ownerName": "Full name",
       "ownerNamePlaceholder": "John Smith",
       "email": "Email address",
@@ -159,6 +161,8 @@
       "connected": "Account connected!",
       "connectedBody": "Your bank information has been securely analyzed.",
       "secure": "Secure connection powered by Plaid. Your credentials are never stored by us.",
+      "connecting": "Connecting...",
+      "analyzing": "Analyzing your profile...",
       "skip": "Skip for now (fewer options)"
     }
   },
@@ -167,7 +171,7 @@
     "scoreLabel": "LendScore",
     "scoreGreat": "Excellent — Multiple options available",
     "scoreGood": "Good — Qualifies for several products",
-    "scoreFair": "Fair — Options are available",
+    "scoreFair": "Fair — Options available",
     "scoreLow": "Limited — Fewer options but they exist",
     "applyWith": "Apply with",
     "approvalOdds": "Approval odds",
@@ -179,17 +183,65 @@
     "redFlags": "What to prepare",
     "privacyNote": "By clicking 'Apply', only that lender will receive your information.",
     "applyNote": "Only this lender will receive your information.",
-    "applied": "Application sent!"
+    "applied": "Application sent!",
+    "noMatchTitle": "No lenders found right now",
+    "noMatchBody": "Your business may qualify in the future. Here are the minimum requirements:",
+    "requirements": "Minimum requirements",
+    "reqRevenue": "$5,000/month in revenue (verified in the last 3 months)",
+    "reqTime": "3+ months in operation",
+    "reqCredit": "Credit score 500+",
+    "reapplyLink": "Update my application when ready",
+    "lenderDisclosure": "Fondeo is a loan referral service, not a lender. We may receive referral fees when a loan is funded."
   },
   "dashboard": {
     "title": "My Dashboard",
     "applications": "My applications",
     "noApplications": "No applications yet. Get started now!",
+    "noApplication": "No application yet. Get started now!",
+    "startApplication": "Start Application",
+    "lendScore": "LendScore",
+    "applicationStatus": "Application Status",
+    "submittedLeads": "Submitted Leads",
+    "viewResults": "View My Options",
+    "updateProfile": "Update Profile",
     "status": {
       "submitted": "Submitted",
       "pending": "Under review",
       "funded": "Approved",
       "declined": "Declined"
+    },
+    "table": {
+      "lender": "Lender",
+      "submittedDate": "Submitted Date",
+      "status": "Status",
+      "amount": "Estimated Amount"
     }
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "unauthorized": "You are not authorized to access this page.",
+    "submittedLeads": "Submitted Leads",
+    "funded": "Funded",
+    "commissions": "Commissions",
+    "pending": "Pending",
+    "noLeads": "No leads yet.",
+    "markFunded": "Mark Funded",
+    "markDeclined": "Mark Declined",
+    "table": {
+      "business": "Business",
+      "owner": "Owner",
+      "lender": "Lender",
+      "submittedDate": "Submitted Date",
+      "status": "Status",
+      "commissionRate": "Commission Rate",
+      "commissionAmount": "Commission Earned",
+      "actions": "Actions"
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "invalidPhone": "Invalid phone number",
+    "selectRequired": "Please select an option"
   }
 }

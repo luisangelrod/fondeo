@@ -36,7 +36,7 @@ export const LENDERS: Record<LenderSlug, Lender> = {
     servesPR: true,
     commissionRate: 0.10,
     isoPortalUrl: 'https://www.greenboxcapital.com/iso-program/',
-    features: ['Sin verificación de crédito mínimo', 'Fondos en 24-48 hrs', 'Atiende Puerto Rico'],
+    features: ['Mínimo de crédito bajo (500+)', 'Fondos en 24-48 hrs', 'Atiende Puerto Rico'],
     logo: '/lenders/greenbox.svg',
   },
   onepark: {
@@ -90,34 +90,41 @@ export function getLenderMatch(
 }
 
 // ── Form-string parsers ───────────────────────────────────────────────────────
-// The application form collects ranges as strings (e.g. "5k_to_15k").
-// These helpers convert them to conservative lower-bound numbers so
-// getLenderMatch() can be used as a hard-rule guardrail against AI matches.
+// The application form (src/app/[locale]/apply/apply-form.tsx) collects ranges
+// as human-readable strings. These maps MUST match the SelectItem `value` props
+// in that file exactly — any drift causes all lookups to return 0 and disqualify
+// every applicant. When adding new revenue/time/credit buckets to the form,
+// update these maps in the same PR.
+//
+// Format contract:
+//   Revenue:        "Under $5K" | "$5K-$15K" | "$15K-$30K" | "$30K-$75K" | "$75K+"
+//   Time in biz:    "Under 6 months" | "6-12 months" | "1-2 years" | "2-5 years" | "5+ years"
+//   Credit score:   "Below 500" | "500-580" | "580-650" | "650-700" | "700+" | "I don't know"
 
 const REVENUE_LOWER_BOUND: Record<string, number> = {
-  under_5k:     0,
-  '5k_to_15k':  5_000,
-  '15k_to_30k': 15_000,
-  '30k_to_50k': 30_000,
-  over_50k:     50_000,
+  'Under $5K':  0,
+  '$5K-$15K':   5_000,
+  '$15K-$30K':  15_000,
+  '$30K-$75K':  30_000,
+  '$75K+':      75_000,
 }
 
 const TIME_IN_BUSINESS_MONTHS: Record<string, number> = {
-  under_3_months:  1,
-  '3_to_6_months': 3,
-  '6_to_12_months': 6,
-  '1_to_2_years':  12,
-  over_2_years:    24,
+  'Under 6 months': 0,   // Conservative lower bound — could be 0 months
+  '3-6 months':     3,   // New option: lower bound is 3 months — satisfies Greenbox & OnePark
+  '6-12 months':    6,
+  '1-2 years':      12,
+  '2-5 years':      24,
+  '5+ years':       60,
 }
 
 const CREDIT_SCORE_LOWER_BOUND: Record<string, number> = {
-  below_500:    0,
-  '500_to_549': 500,
-  '550_to_599': 550,
-  '600_to_649': 600,
-  '650_to_699': 650,
-  '700_plus':   700,
-  unknown:      0,
+  'Below 500':    0,
+  '500-580':      500,
+  '580-650':      580,
+  '650-700':      650,
+  '700+':         700,
+  "I don't know": 0,
 }
 
 /** Convert a form revenue-range string to its lower-bound dollar value. */

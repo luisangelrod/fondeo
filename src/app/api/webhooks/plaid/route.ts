@@ -1,31 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'crypto';
-import { eq } from 'drizzle-orm';
+import { eq, and, gt } from 'drizzle-orm';
 import { db } from '@/db';
 import { plaidConnections, businesses, aiQualifications, lenderMatches } from '@/db/schema';
 import { qualifyBusiness, analyzePlaidTransactions } from '@/lib/qualify';
 import { LENDERS, type LenderSlug } from '@/lib/lenders';
-import { Configuration, PlaidApi, PlaidEnvironments, WebhookType } from 'plaid';
-
-function getPlaidClient(): PlaidApi {
-  const clientId = process.env.PLAID_CLIENT_ID;
-  const secret = process.env.PLAID_SECRET;
-  if (!clientId) throw new Error('PLAID_CLIENT_ID environment variable is not set');
-  if (!secret) throw new Error('PLAID_SECRET environment variable is not set');
-
-  const env = (process.env.PLAID_ENV ?? 'sandbox') as keyof typeof PlaidEnvironments;
-  return new PlaidApi(
-    new Configuration({
-      basePath: PlaidEnvironments[env],
-      baseOptions: {
-        headers: {
-          'PLAID-CLIENT-ID': clientId,
-          'PLAID-SECRET': secret,
-        },
-      },
-    })
-  );
-}
+import { WebhookType } from 'plaid';
+import { getPlaidClient, fetchAllTransactions } from '@/lib/plaid';
 
 /**
  * Verifies the Plaid-Verification JWT header against the raw request body.
@@ -52,6 +33,10 @@ async function verifyPlaidWebhookSignature(
       Buffer.from(headerB64, 'base64url').toString('utf-8')
     ) as { kid?: string; alg?: string };
     if (!header.kid) return false;
+    // Reject any algorithm other than ES256 to prevent algorithm confusion attacks.
+    // An attacker could craft a header with alg:"none" or alg:"HS256" (using the
+    // EC public key as an HMAC secret) to bypass signature verification entirely.
+    if (header.alg !== 'ES256') return false;
 
     // Fetch Plaid's rotating public key
     const plaidClient = getPlaidClient();
@@ -94,8 +79,10 @@ async function verifyPlaidWebhookSignature(
       Buffer.from(payloadB64, 'base64url').toString('utf-8')
     ) as { request_body_sha256?: string; iat?: number };
 
-    // Reject tokens older than 5 minutes (replay protection)
-    if (typeof payload.iat === 'number' && Date.now() / 1000 - payload.iat > 300) {
+    // Reject tokens older than 5 minutes (replay protection).
+    // Fail-closed: also reject if iat is absent — a missing iat bypasses the
+    // replay window entirely under the old fail-open check.
+    if (typeof payload.iat !== 'number' || Date.now() / 1000 - payload.iat > 300) {
       return false;
     }
 
@@ -164,20 +151,51 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: 'Business not found' }, { status: 404 });
     }
 
+    // Idempotency guard: Plaid retries webhooks on 5xx responses, which would
+    // fire qualifyBusiness() (a ~$0.01 Claude call) and insert duplicate rows
+    // on each retry. Check whether a qualification already ran for this Plaid
+    // item within the last 5 minutes and skip processing if so.
+    const recentQualification = await db
+      .select({ id: aiQualifications.id, createdAt: aiQualifications.createdAt })
+      .from(aiQualifications)
+      .innerJoin(businesses, eq(businesses.id, aiQualifications.businessId))
+      .innerJoin(plaidConnections, eq(plaidConnections.businessId, businesses.id))
+      .where(
+        and(
+          eq(plaidConnections.itemId, item_id),
+          gt(aiQualifications.createdAt, new Date(Date.now() - 5 * 60 * 1000))
+        )
+      )
+      .limit(1);
+
+    if (recentQualification.length > 0) {
+      console.log(`[webhook] Skipping duplicate qualification for item ${item_id}`);
+      return NextResponse.json({ received: true, duplicate: true });
+    }
+
     const plaidClient = getPlaidClient();
     const now = new Date();
     const endDate = now.toISOString().split('T')[0]!;
     const startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000)
       .toISOString().split('T')[0]!;
 
-    const txnResponse = await plaidClient.transactionsGet({
-      access_token: connection.accessToken,
-      start_date: startDate,
-      end_date: endDate,
-    });
+    // Fix 1: use paginated fetch so businesses with >500 transactions in the
+    // lookback window are not silently truncated.
+    const { transactions } = await fetchAllTransactions(
+      plaidClient,
+      connection.accessToken,
+      startDate,
+      endDate,
+    );
 
     const plaidAnalysis = analyzePlaidTransactions(
-      txnResponse.data.transactions.map((t) => ({ amount: t.amount, date: t.date }))
+      transactions.map((t) => ({
+        amount: t.amount,
+        date: t.date,
+        name: t.name ?? t.merchant_name ?? '',
+        merchant_name: t.merchant_name ?? '',
+        personal_finance_category: t.personal_finance_category ?? null,
+      }))
     );
 
     const qualification = await qualifyBusiness({

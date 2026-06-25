@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
+import { checkRateLimit } from '@/lib/rate-limit';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/db';
 import { businesses, aiQualifications, lenderMatches } from '@/db/schema';
 import { qualifyBusiness, type PlaidSummary } from '@/lib/qualify';
+import { exchangePlaidToken } from '@/lib/plaid-exchange';
 import { LENDERS, type LenderSlug } from '@/lib/lenders';
 
 const applicationSchema = z.object({
@@ -29,6 +31,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const rateLimit = checkRateLimit(`applications:${userId}`, 5, 60 * 60 * 1000); // 5 per hour
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: 'Demasiadas solicitudes. Intenta de nuevo más tarde.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) } }
+      );
     }
 
     const body: unknown = await req.json();
@@ -82,19 +92,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       })
       .returning();
 
-    // Optionally exchange Plaid token — read back the analysis so it enriches the qualification
+    // Optionally exchange Plaid token — direct function call instead of an
+    // HTTP round-trip back to /api/plaid/exchange (Fix 3: eliminates the
+    // self-calling fetch anti-pattern and the INTERNAL_API_SECRET dependency).
     let plaidAnalysis: PlaidSummary | undefined = undefined;
     if (data.plaidPublicToken) {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
-        const plaidRes = await fetch(`${baseUrl}/api/plaid/exchange`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-internal-user-id': userId },
-          body: JSON.stringify({ public_token: data.plaidPublicToken, business_id: business.id }),
-        });
-        if (plaidRes.ok) {
-          const plaidJson = await plaidRes.json() as { analysis?: PlaidSummary };
-          plaidAnalysis = plaidJson.analysis;
+        const result = await exchangePlaidToken(data.plaidPublicToken, business.id, userId);
+        if (result.success) {
+          plaidAnalysis = result.analysis;
           // Mark Plaid as connected on the business row
           await db.update(businesses)
             .set({ plaidConnected: true })

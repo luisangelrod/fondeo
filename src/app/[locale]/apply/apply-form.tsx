@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -67,40 +67,32 @@ const US_STATES = [
   { value: 'GU', label: 'Guam' },
 ];
 
-// ── Zod Schemas (with Spanish error messages) ────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 
-const step1Schema = z.object({
-  businessName: z.string().min(1, 'El nombre del negocio es requerido'),
-  businessType: z.string().min(1, 'Selecciona el tipo de negocio'),
-  timeInBusiness: z.string().min(1, 'Selecciona el tiempo en operación'),
-  state: z.string().min(1, 'Selecciona el estado o territorio'),
-});
+interface Step1Data {
+  businessName: string;
+  businessType: string;
+  timeInBusiness: string;
+  state: string;
+}
 
-const step2Schema = z.object({
-  monthlyRevenue: z.string().min(1, 'Selecciona tus ingresos mensuales'),
-  revenueConsistency: z.string().min(1, 'Selecciona la consistencia de tus ingresos'),
-});
+interface Step2Data {
+  monthlyRevenue: string;
+  revenueConsistency: string;
+}
 
-const step3Schema = z.object({
-  loanPurpose: z.string().min(1, 'Selecciona el propósito del préstamo'),
-  loanAmount: z.string().min(1, 'Selecciona el monto que necesitas'),
-  urgency: z.string().min(1, 'Selecciona la urgencia'),
-});
+interface Step3Data {
+  loanPurpose: string;
+  loanAmount: string;
+  urgency: string;
+}
 
-const step4Schema = z.object({
-  ownerName: z.string().min(2, 'El nombre completo es requerido (mínimo 2 caracteres)'),
-  email: z.string().email('Ingresa un correo electrónico válido'),
-  phone: z
-    .string()
-    .min(7, 'Ingresa un número de teléfono válido')
-    .regex(/^[\d\s()\-+.]+$/, 'Formato de teléfono inválido'),
-  creditScoreRange: z.string().min(1, 'Selecciona tu rango de puntaje de crédito'),
-});
-
-type Step1Data = z.infer<typeof step1Schema>;
-type Step2Data = z.infer<typeof step2Schema>;
-type Step3Data = z.infer<typeof step3Schema>;
-type Step4Data = z.infer<typeof step4Schema>;
+interface Step4Data {
+  ownerName: string;
+  email: string;
+  phone: string;
+  creditScoreRange: string;
+}
 
 // ── Full Form Data Type ───────────────────────────────────────────────────────
 
@@ -139,13 +131,20 @@ function StepIndicator({ step, icon: Icon, label }: { step: number; icon: React.
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <p className="text-red-500 text-xs mt-1">{message}</p>;
+  return <p role="alert" aria-live="polite" className="text-red-500 text-xs mt-1">{message}</p>;
 }
 
 // ── Step 1: Business Basics ──────────────────────────────────────────────────
 
 function Step1({ defaultValues, onNext }: { defaultValues: Partial<AllFormData>; onNext: (d: Step1Data) => void }) {
   const t = useTranslations('apply');
+  const tV = useTranslations('validation');
+  const step1Schema = useMemo(() => z.object({
+    businessName: z.string().min(1, tV('required')),
+    businessType: z.string().min(1, tV('selectRequired')),
+    timeInBusiness: z.string().min(1, tV('selectRequired')),
+    state: z.string().min(1, tV('selectRequired')),
+  }), [tV]);
   const { register, handleSubmit, control, formState: { errors } } = useForm<Step1Data>({
     resolver: zodResolver(step1Schema),
     defaultValues: {
@@ -168,6 +167,7 @@ function Step1({ defaultValues, onNext }: { defaultValues: Partial<AllFormData>;
 
   const timePeriods = [
     { value: 'Under 6 months', label: t('step1.timePeriods.Under 6 months') },
+    { value: '3-6 months', label: t('step1.timePeriods.3-6 months') },
     { value: '6-12 months', label: t('step1.timePeriods.6-12 months') },
     { value: '1-2 years', label: t('step1.timePeriods.1-2 years') },
     { value: '2-5 years', label: t('step1.timePeriods.2-5 years') },
@@ -188,13 +188,13 @@ function Step1({ defaultValues, onNext }: { defaultValues: Partial<AllFormData>;
       </div>
 
       <div>
-        <Label>{t('step1.businessType')} *</Label>
+        <Label htmlFor="businessType">{t('step1.businessType')} *</Label>
         <Controller
           control={control}
           name="businessType"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger className={`mt-1 ${errors.businessType ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="businessType" className={`mt-1 ${errors.businessType ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step1.businessTypePlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -209,13 +209,13 @@ function Step1({ defaultValues, onNext }: { defaultValues: Partial<AllFormData>;
       </div>
 
       <div>
-        <Label>{t('step1.timeInBusiness')} *</Label>
+        <Label htmlFor="timeInBusiness">{t('step1.timeInBusiness')} *</Label>
         <Controller
           control={control}
           name="timeInBusiness"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger className={`mt-1 ${errors.timeInBusiness ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="timeInBusiness" className={`mt-1 ${errors.timeInBusiness ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step1.timeInBusinessPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -230,13 +230,13 @@ function Step1({ defaultValues, onNext }: { defaultValues: Partial<AllFormData>;
       </div>
 
       <div>
-        <Label>{t('step1.state')} *</Label>
+        <Label htmlFor="state">{t('step1.state')} *</Label>
         <Controller
           control={control}
           name="state"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger className={`mt-1 ${errors.state ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="state" className={`mt-1 ${errors.state ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step1.statePlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -261,6 +261,11 @@ function Step1({ defaultValues, onNext }: { defaultValues: Partial<AllFormData>;
 
 function Step2({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFormData>; onNext: (d: Step2Data) => void; onBack: () => void }) {
   const t = useTranslations('apply');
+  const tV = useTranslations('validation');
+  const step2Schema = useMemo(() => z.object({
+    monthlyRevenue: z.string().min(1, tV('selectRequired')),
+    revenueConsistency: z.string().min(1, tV('selectRequired')),
+  }), [tV]);
   const { handleSubmit, control, formState: { errors } } = useForm<Step2Data>({
     resolver: zodResolver(step2Schema),
     defaultValues: {
@@ -287,13 +292,13 @@ function Step2({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
   return (
     <form onSubmit={handleSubmit(onNext)} className="space-y-5">
       <div>
-        <Label>{t('step2.monthlyRevenue')} *</Label>
+        <Label htmlFor="monthlyRevenue">{t('step2.monthlyRevenue')} *</Label>
         <Controller
           control={control}
           name="monthlyRevenue"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger className={`mt-1 ${errors.monthlyRevenue ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="monthlyRevenue" className={`mt-1 ${errors.monthlyRevenue ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step2.monthlyRevenuePlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -308,13 +313,13 @@ function Step2({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
       </div>
 
       <div>
-        <Label>{t('step2.revenueConsistency')} *</Label>
+        <Label htmlFor="revenueConsistency">{t('step2.revenueConsistency')} *</Label>
         <Controller
           control={control}
           name="revenueConsistency"
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger className={`mt-1 ${errors.revenueConsistency ? 'border-red-500' : ''}`}>
+              <SelectTrigger id="revenueConsistency" className={`mt-1 ${errors.revenueConsistency ? 'border-red-500' : ''}`}>
                 <SelectValue placeholder={t('step2.revenueConsistencyPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -344,6 +349,12 @@ function Step2({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
 
 function Step3({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFormData>; onNext: (d: Step3Data) => void; onBack: () => void }) {
   const t = useTranslations('apply');
+  const tV = useTranslations('validation');
+  const step3Schema = useMemo(() => z.object({
+    loanPurpose: z.string().min(1, tV('selectRequired')),
+    loanAmount: z.string().min(1, tV('selectRequired')),
+    urgency: z.string().min(1, tV('selectRequired')),
+  }), [tV]);
   const { handleSubmit, control, formState: { errors } } = useForm<Step3Data>({
     resolver: zodResolver(step3Schema),
     defaultValues: {
@@ -380,10 +391,10 @@ function Step3({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
   return (
     <form onSubmit={handleSubmit(onNext)} className="space-y-5">
       <div>
-        <Label>{t('step3.loanPurpose')} *</Label>
+        <Label htmlFor="loanPurpose">{t('step3.loanPurpose')} *</Label>
         <Controller control={control} name="loanPurpose" render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger className={`mt-1 ${errors.loanPurpose ? 'border-red-500' : ''}`}>
+            <SelectTrigger id="loanPurpose" className={`mt-1 ${errors.loanPurpose ? 'border-red-500' : ''}`}>
               <SelectValue placeholder={t('step3.loanPurposePlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -395,10 +406,10 @@ function Step3({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
       </div>
 
       <div>
-        <Label>{t('step3.loanAmount')} *</Label>
+        <Label htmlFor="loanAmount">{t('step3.loanAmount')} *</Label>
         <Controller control={control} name="loanAmount" render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger className={`mt-1 ${errors.loanAmount ? 'border-red-500' : ''}`}>
+            <SelectTrigger id="loanAmount" className={`mt-1 ${errors.loanAmount ? 'border-red-500' : ''}`}>
               <SelectValue placeholder={t('step3.loanAmountPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -410,10 +421,10 @@ function Step3({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
       </div>
 
       <div>
-        <Label>{t('step3.urgency')} *</Label>
+        <Label htmlFor="urgency">{t('step3.urgency')} *</Label>
         <Controller control={control} name="urgency" render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger className={`mt-1 ${errors.urgency ? 'border-red-500' : ''}`}>
+            <SelectTrigger id="urgency" className={`mt-1 ${errors.urgency ? 'border-red-500' : ''}`}>
               <SelectValue placeholder={t('step3.urgencyPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -440,6 +451,16 @@ function Step3({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
 
 function Step4({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFormData>; onNext: (d: Step4Data) => void; onBack: () => void }) {
   const t = useTranslations('apply');
+  const tV = useTranslations('validation');
+  const step4Schema = useMemo(() => z.object({
+    ownerName: z.string().min(2, tV('required')),
+    email: z.string().email(tV('invalidEmail')),
+    phone: z
+      .string()
+      .min(7, tV('invalidPhone'))
+      .regex(/^[\d\s()\-+.]+$/, tV('invalidPhone')),
+    creditScoreRange: z.string().min(1, tV('selectRequired')),
+  }), [tV]);
   const { register, handleSubmit, control, formState: { errors } } = useForm<Step4Data>({
     resolver: zodResolver(step4Schema),
     defaultValues: {
@@ -497,10 +518,10 @@ function Step4({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
       </div>
 
       <div>
-        <Label>{t('step4.creditScore')} *</Label>
+        <Label htmlFor="creditScoreRange">{t('step4.creditScore')} *</Label>
         <Controller control={control} name="creditScoreRange" render={({ field }) => (
           <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger className={`mt-1 ${errors.creditScoreRange ? 'border-red-500' : ''}`}>
+            <SelectTrigger id="creditScoreRange" className={`mt-1 ${errors.creditScoreRange ? 'border-red-500' : ''}`}>
               <SelectValue placeholder={t('step4.creditScorePlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -510,6 +531,10 @@ function Step4({ defaultValues, onNext, onBack }: { defaultValues: Partial<AllFo
         )} />
         <FieldError message={errors.creditScoreRange?.message} />
       </div>
+
+      <p className="text-xs text-muted-foreground mt-2">
+        {t('step4.privacyNote')}
+      </p>
 
       <div className="flex gap-3">
         <Button type="button" variant="outline" onClick={onBack} className="flex-1">
@@ -608,7 +633,7 @@ function Step5({
           className="w-full bg-fondeo-green-700 hover:bg-fondeo-green-800 text-white h-12"
         >
           {plaidLoading ? (
-            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Conectando...</>
+            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t('step5.connecting')}</>
           ) : (
             <><Landmark className="mr-2 h-5 w-5" /> {t('step5.connect')}</>
           )}
@@ -634,23 +659,13 @@ function Step5({
           className="w-full bg-fondeo-green-700 hover:bg-fondeo-green-800 text-white h-12 text-base font-semibold"
         >
           {isSubmitting ? (
-            <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Analizando tu perfil...</>
-          ) : (
+            <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> {t('step5.analyzing')}</>
+          ) : bankConnected ? (
             <>{t('submit')} <ArrowRight className="ml-2 h-5 w-5" /></>
+          ) : (
+            <>{t('step5.skip')} <ArrowRight className="ml-2 h-5 w-5" /></>
           )}
         </Button>
-
-        {!bankConnected && (
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => onSubmit(undefined)}
-            disabled={isSubmitting}
-            className="w-full text-gray-500 text-sm"
-          >
-            {t('step5.skip')}
-          </Button>
-        )}
 
         <Button type="button" variant="outline" onClick={onBack} disabled={isSubmitting}>
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}

@@ -1,26 +1,22 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { Configuration, PlaidApi, PlaidEnvironments, Products, CountryCode } from 'plaid';
-
-function getPlaidClient() {
-  const env = (process.env.PLAID_ENV ?? 'sandbox') as keyof typeof PlaidEnvironments;
-  const config = new Configuration({
-    basePath: PlaidEnvironments[env],
-    baseOptions: {
-      headers: {
-        'PLAID-CLIENT-ID': process.env.PLAID_CLIENT_ID ?? '',
-        'PLAID-SECRET': process.env.PLAID_SECRET ?? '',
-      },
-    },
-  });
-  return new PlaidApi(config);
-}
+import { checkRateLimit } from '@/lib/rate-limit';
+import { Products, CountryCode } from 'plaid';
+import { getPlaidClient } from '@/lib/plaid';
 
 export async function POST() {
   try {
     const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const rateLimit = checkRateLimit(`plaid:${userId}`, 10, 60 * 60 * 1000); // 10 per hour
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: 'Demasiadas solicitudes. Intenta de nuevo más tarde.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) } }
+      );
     }
 
     const plaidClient = getPlaidClient();

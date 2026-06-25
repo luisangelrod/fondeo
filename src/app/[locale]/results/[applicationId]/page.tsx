@@ -1,6 +1,8 @@
+import { auth } from '@clerk/nextjs/server'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/db'
 import { businesses, aiQualifications, lenderMatches } from '@/db/schema'
-import { eq, desc } from 'drizzle-orm'
+import { eq, desc, and } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import { LENDERS } from '@/lib/lenders'
 import { getLendScoreLabel, getLendScoreColorClass } from '@/lib/utils'
@@ -18,7 +20,13 @@ interface Props {
 export default async function ResultsPage({ params }: Props) {
   const { applicationId, locale } = await params
 
-  const [business] = await db.select().from(businesses).where(eq(businesses.id, applicationId)).limit(1)
+  const t = await getTranslations({ locale, namespace: 'results' })
+
+  const { userId } = await auth()
+  if (!userId) notFound()
+
+  const [business] = await db.select().from(businesses)
+    .where(and(eq(businesses.id, applicationId), eq(businesses.clerkUserId, userId))).limit(1)
   if (!business) notFound()
 
   // DESC so re-qualifications (Plaid webhook, manual re-run) always surface the latest result
@@ -47,8 +55,8 @@ export default async function ResultsPage({ params }: Props) {
     score >= 35 ? 'bg-yellow-500' : 'bg-orange-500'
   const strengths = (qualification.strengths as string[]) ?? []
   const redFlags = (qualification.redFlags as string[]) ?? []
-  const strengthsLabel = locale === 'es' ? 'Lo que juega a tu favor' : 'What works in your favor'
-  const redFlagsLabel = locale === 'es' ? 'Lo que debes preparar' : 'What to prepare'
+  const strengthsLabel = t('strengths')
+  const redFlagsLabel = t('redFlags')
 
   return (
     <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -67,8 +75,8 @@ export default async function ResultsPage({ params }: Props) {
           {/* Visual progress bar */}
           <div className="max-w-xs mx-auto mb-3">
             <div className="flex justify-between text-xs text-gray-400 mb-1">
-              <span>{locale === 'es' ? 'Limitado' : 'Limited'}</span>
-              <span>{locale === 'es' ? 'Excelente' : 'Excellent'}</span>
+              <span>{t('scoreLow')}</span>
+              <span>{t('scoreGreat')}</span>
             </div>
             <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
               <div
@@ -105,6 +113,31 @@ export default async function ResultsPage({ params }: Props) {
           ))}
         </div>
 
+        {matches.length === 0 && (
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 text-center space-y-3 mb-8">
+            <div className="text-2xl">⏳</div>
+            <h3 className="font-semibold text-amber-900">
+              {t('noMatchTitle')}
+            </h3>
+            <p className="text-amber-800 text-sm">
+              {t('noMatchBody')}
+            </p>
+            <div className="text-left mt-4 space-y-2 text-sm text-amber-800">
+              <p className="font-medium">
+                {t('requirements')}:
+              </p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>{t('reqRevenue')}</li>
+                <li>{t('reqTime')}</li>
+                <li>{t('reqCredit')}</li>
+              </ul>
+            </div>
+            <a href="/apply" className="inline-block mt-4 text-sm font-medium text-amber-900 underline">
+              {t('reapplyLink')}
+            </a>
+          </div>
+        )}
+
         {strengths.length > 0 && (
           <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-4">
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
@@ -134,6 +167,11 @@ export default async function ResultsPage({ params }: Props) {
             </ul>
           </div>
         )}
+
+        {/* Legal Disclosure */}
+        <p className="text-xs text-muted-foreground text-center mt-8 max-w-2xl mx-auto">
+          {t('lenderDisclosure')}
+        </p>
       </div>
     </main>
   )
