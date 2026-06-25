@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+import { auth } from '@/lib/auth-server';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { Products, CountryCode } from 'plaid';
 import { getPlaidClient } from '@/lib/plaid';

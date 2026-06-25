@@ -25,13 +25,32 @@ export function UserButton({ afterSignOutUrl }: { afterSignOutUrl?: string }) {
 }
 
 export function SignedIn({ children }: { children: React.ReactNode }) {
-  // In dev mode, treat as signed in
   return <>{children}</>;
 }
 
 export function SignedOut({ children }: { children: React.ReactNode }) {
-  // In dev mode, hide signed-out content
   return null;
+}
+
+// Mock SignIn and SignUp components — redirect to home in dev mode
+export function SignIn({ appearance }: { appearance?: any }) {
+  return (
+    <div className="p-6 border border-gray-200 rounded-xl text-center bg-white shadow">
+      <p className="text-gray-500 text-sm mb-2">Auth bypassed (dev mode)</p>
+      <p className="text-gray-700 font-medium">Signed in as test@example.com</p>
+      <a href="/" className="mt-4 inline-block text-sm text-emerald-600 hover:underline">Go to app →</a>
+    </div>
+  );
+}
+
+export function SignUp({ appearance }: { appearance?: any }) {
+  return (
+    <div className="p-6 border border-gray-200 rounded-xl text-center bg-white shadow">
+      <p className="text-gray-500 text-sm mb-2">Auth bypassed (dev mode)</p>
+      <p className="text-gray-700 font-medium">Signed in as test@example.com</p>
+      <a href="/" className="mt-4 inline-block text-sm text-emerald-600 hover:underline">Go to app →</a>
+    </div>
+  );
 }
 
 export function useUser() {

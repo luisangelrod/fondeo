@@ -40,3 +40,4 @@ next-env.d.ts
 
 # drizzle generated migrations (optional — remove if you want to commit them)
 # drizzle/
+.env*

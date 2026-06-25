@@ -11,16 +11,22 @@ const INTL_SKIP_PREFIXES = ['/sign-in', '/sign-up', '/api/'];
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Dev bypass: skip auth entirely when DISABLE_AUTH=true
-  // Clerk imports are also aliased to mocks via webpack (next.config.ts)
-  if (process.env.DISABLE_AUTH === 'true') {
+  // Dev bypass: skip Clerk entirely when USE_AUTH_MOCKS=true (or legacy DISABLE_AUTH=true).
+  // The webpack alias in next.config.ts already maps @clerk/nextjs/server → mocks,
+  // but middleware runs on the Edge runtime which uses a separate bundle — so we
+  // guard it here explicitly to avoid any Clerk initialisation overhead.
+  if (
+    process.env.USE_AUTH_MOCKS === 'true' ||
+    process.env.DISABLE_AUTH === 'true'
+  ) {
     if (INTL_SKIP_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
       return NextResponse.next();
     }
     return intlMiddleware(request);
   }
 
-  // Production: dynamically import Clerk so it never initialises when bypassed
+  // Production: use real Clerk middleware.
+  // Dynamic import keeps Clerk out of the Edge bundle when the bypass is active.
   const { clerkMiddleware, createRouteMatcher } = await import('@clerk/nextjs/server');
 
   const isProtectedRoute = createRouteMatcher([
@@ -30,7 +36,6 @@ export default async function middleware(request: NextRequest) {
     '/:locale/results(.*)',
     '/dashboard(.*)',
     '/admin(.*)',
-    // Non-locale-prefixed fallbacks so deep-links before intl redirect still auth-gate
     '/apply(.*)',
     '/results(.*)',
   ]);
@@ -40,7 +45,6 @@ export default async function middleware(request: NextRequest) {
       await auth.protect();
     }
 
-    // Do not run the intl middleware for Clerk auth pages or API routes
     if (INTL_SKIP_PREFIXES.some((prefix) => req.nextUrl.pathname.startsWith(prefix))) {
       return;
     }
@@ -51,9 +55,7 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Match all paths except Next.js internals and static files
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
     '/(api|trpc)(.*)',
   ],
 };

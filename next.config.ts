@@ -4,24 +4,27 @@ import path from 'path';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
+// Set USE_AUTH_MOCKS=true in .env.local (or Vercel env) to bypass real Clerk.
+// When false (production), Clerk is used normally — no code changes required.
+const USE_AUTH_MOCKS = process.env.USE_AUTH_MOCKS === 'true';
+
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000'],
+      allowedOrigins: ['localhost:3000', 'fondeo-dev.vercel.app', '*.vercel.app'],
     },
   },
   images: {
     remotePatterns: [],
   },
-  // TypeScript is checked separately via `tsc --noEmit`; skip in build for speed
   typescript: {
     ignoreBuildErrors: false,
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   webpack: (config, { isServer }) => {
-    if (process.env.DISABLE_AUTH === 'true') {
+    if (USE_AUTH_MOCKS) {
       config.resolve = config.resolve || {};
       config.resolve.alias = {
         ...config.resolve.alias,

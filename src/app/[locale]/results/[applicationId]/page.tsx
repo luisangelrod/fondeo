@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth-server'
 import { getTranslations } from 'next-intl/server'
 import { db } from '@/db'
 import { businesses, aiQualifications, lenderMatches } from '@/db/schema'
@@ -25,20 +25,24 @@ export default async function ResultsPage({ params }: Props) {
   const { userId } = await auth()
   if (!userId) notFound()
 
-  const [business] = await db.select().from(businesses)
-    .where(and(eq(businesses.id, applicationId), eq(businesses.clerkUserId, userId))).limit(1)
-  if (!business) notFound()
-
-  // DESC so re-qualifications (Plaid webhook, manual re-run) always surface the latest result
-  const [qualification] = await db.select().from(aiQualifications)
-    .where(eq(aiQualifications.businessId, applicationId))
-    .orderBy(desc(aiQualifications.createdAt))
-    .limit(1)
-
-  if (!qualification) notFound()
-
-  const rawMatches = await db.select().from(lenderMatches)
-    .where(eq(lenderMatches.businessId, applicationId))
+  let business: any, qualification: any, rawMatches: any[] = [];
+  try {
+    const [biz] = await db.select().from(businesses)
+      .where(and(eq(businesses.id, applicationId), eq(businesses.clerkUserId, userId))).limit(1)
+    if (!biz) notFound()
+    business = biz
+    const [qual] = await db.select().from(aiQualifications)
+      .where(eq(aiQualifications.businessId, applicationId))
+      .orderBy(desc(aiQualifications.createdAt))
+      .limit(1)
+    if (!qual) notFound()
+    qualification = qual
+    rawMatches = await db.select().from(lenderMatches)
+      .where(eq(lenderMatches.businessId, applicationId))
+  } catch (e: any) {
+    if (e?.digest === 'NEXT_NOT_FOUND') throw e
+    notFound()
+  }
 
   // Best approval odds (high → medium → low) shown first
   const matches = [...rawMatches].sort(

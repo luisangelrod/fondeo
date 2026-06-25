@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+import { auth } from '@/lib/auth-server';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { eq, and } from 'drizzle-orm';
 import { z } from 'zod';

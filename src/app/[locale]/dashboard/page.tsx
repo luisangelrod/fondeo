@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server';
+import { auth } from '@/lib/auth-server';
 import { redirect } from 'next/navigation';
 import { eq, desc } from 'drizzle-orm';
 import { getTranslations } from 'next-intl/server';
@@ -36,28 +36,30 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'dashboard' });
 
-  // Fetch the most recent business for this user
-  const [business] = await db
-    .select()
-    .from(businesses)
-    .where(eq(businesses.clerkUserId, userId))
-    .orderBy(desc(businesses.createdAt))
-    .limit(1);
+  // Fetch the most recent business for this user — gracefully handles missing DB
+  let business: any = undefined;
+  let qualification: any = null;
+  let leads: any[] = [];
 
-  // Fetch latest qualification
-  const qualification = business
-    ? await db
+  try {
+    const [biz] = await db
+      .select()
+      .from(businesses)
+      .where(eq(businesses.clerkUserId, userId))
+      .orderBy(desc(businesses.createdAt))
+      .limit(1);
+    business = biz;
+
+    if (business) {
+      qualification = await db
         .select()
         .from(aiQualifications)
         .where(eq(aiQualifications.businessId, business.id))
         .orderBy(desc(aiQualifications.createdAt))
         .limit(1)
-        .then((r) => r[0])
-    : null;
+        .then((r: any[]) => r[0] ?? null);
 
-  // Fetch submitted leads
-  const leads = business
-    ? await db
+      leads = await db
         .select({
           submission: leadSubmissions,
           match: lenderMatches,
@@ -68,8 +70,14 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           eq(leadSubmissions.lenderMatchId, lenderMatches.id)
         )
         .where(eq(leadSubmissions.businessId, business.id))
-        .orderBy(desc(leadSubmissions.submittedAt))
-    : [];
+        .orderBy(desc(leadSubmissions.submittedAt));
+    }
+  } catch {
+    // DB unavailable (dev/placeholder) — show empty state
+    business = undefined;
+    qualification = null;
+    leads = [];
+  }
 
   const score = qualification?.lendScore ?? null;
   const scoreColor = score !== null ? getLendScoreHex(score) : '#9ca3af';
@@ -235,7 +243,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                         </tr>
                       </thead>
                       <tbody>
-                        {leads.map(({ submission, match }) => {
+                        {leads.map(({ submission, match }: any) => {
                           const { variant, label } = statusBadge(submission.status);
                           return (
                             <tr
