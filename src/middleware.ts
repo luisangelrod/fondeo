@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -77,7 +78,6 @@ export default async function middleware(request: NextRequest) {
   // When USE_AUTH_MOCKS=false, the webpack alias is inactive and @clerk/nextjs/server
   // resolves to the real package. Requires NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY and
   // CLERK_SECRET_KEY to be set in the environment.
-  const { clerkMiddleware, createRouteMatcher } = await import('@clerk/nextjs/server');
   const isProtectedRoute = createRouteMatcher([
     '/:locale/dashboard(.*)', '/:locale/admin(.*)',
     '/:locale/apply(.*)',     '/:locale/results(.*)',
