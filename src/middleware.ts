@@ -53,13 +53,13 @@ export default async function middleware(request: NextRequest) {
       const valid = await crypto.subtle.verify(
         'HMAC',
         key,
-        Buffer.from(sigB64, 'base64'),
+        Uint8Array.from(atob(sigB64), (c) => c.charCodeAt(0)),
         new TextEncoder().encode(payloadB64)
       );
       if (!valid) throw new Error('invalid signature');
 
       // Check expiry
-      const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString());
+      const payload = JSON.parse(atob(payloadB64));
       if (Date.now() > payload.exp) throw new Error('expired');
     } catch {
       const res = NextResponse.redirect(new URL('/dev-login', request.url));
