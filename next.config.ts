@@ -23,15 +23,16 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  webpack: (config, { isServer }) => {
-    if (USE_AUTH_MOCKS) {
-      config.resolve = config.resolve || {};
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@clerk/nextjs': path.join(process.cwd(), 'src/mocks/clerk-client.tsx'),
-        '@clerk/nextjs/server': path.join(process.cwd(), 'src/mocks/clerk-server.ts'),
-      };
-    }
+  webpack: (config) => {
+    // Always alias @clerk to mocks until real Clerk keys are added to Vercel.
+    // To switch to real Clerk: remove this block and add NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+    // + CLERK_SECRET_KEY to the Vercel environment variables.
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@clerk/nextjs': path.join(process.cwd(), 'src/mocks/clerk-client.tsx'),
+      '@clerk/nextjs/server': path.join(process.cwd(), 'src/mocks/clerk-server.ts'),
+    };
     return config;
   },
 };
