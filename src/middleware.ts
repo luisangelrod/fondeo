@@ -74,24 +74,20 @@ export default async function middleware(request: NextRequest) {
   }
 
   // ─── PRODUCTION (real Clerk) ────────────────────────────────────────────────
-  // Uncomment when USE_AUTH_MOCKS=false and real Clerk keys are configured:
-  //
-  // const { clerkMiddleware, createRouteMatcher } = await import('@clerk/nextjs/server');
-  // const isProtectedRoute = createRouteMatcher([
-  //   '/:locale/dashboard(.*)', '/:locale/admin(.*)',
-  //   '/:locale/apply(.*)',     '/:locale/results(.*)',
-  // ]);
-  // return clerkMiddleware(async (auth, req) => {
-  //   if (isProtectedRoute(req)) await auth.protect();
-  //   if (INTL_SKIP_PREFIXES.some(p => req.nextUrl.pathname.startsWith(p))) return;
-  //   return intlMiddleware(req);
-  // })(request, {} as any);
-
-  // Fallback until real Clerk is configured
-  if (INTL_SKIP_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
-    return NextResponse.next();
-  }
-  return intlMiddleware(request);
+  // When USE_AUTH_MOCKS=false, the webpack alias is inactive and @clerk/nextjs/server
+  // resolves to the real package. Requires NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY and
+  // CLERK_SECRET_KEY to be set in the environment.
+  const { clerkMiddleware, createRouteMatcher } = await import('@clerk/nextjs/server');
+  const isProtectedRoute = createRouteMatcher([
+    '/:locale/dashboard(.*)', '/:locale/admin(.*)',
+    '/:locale/apply(.*)',     '/:locale/results(.*)',
+  ]);
+  return clerkMiddleware(async (auth, req) => {
+    if (isProtectedRoute(req)) await auth.protect();
+    if (INTL_SKIP_PREFIXES.some(p => req.nextUrl.pathname.startsWith(p))) return;
+    return intlMiddleware(req);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  })(request, {} as any);
 }
 
 export const config = {
